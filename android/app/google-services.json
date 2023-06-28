@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "313459720848",
+    "project_id": "igbo-language-tutor",
+    "storage_bucket": "igbo-language-tutor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313459720848:android:2902edbfc917409580ce15",
+        "android_client_info": {
+          "package_name": "com.moyongho.igbo_lang_tutor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313459720848-jvh9gb56p4ol1if487il5hu52otllea0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe2WZADm0E5h0G3x-IDZOqG0vNcOM7Whw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313459720848-jvh9gb56p4ol1if487il5hu52otllea0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
