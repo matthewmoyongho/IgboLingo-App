@@ -1,3 +1,5 @@
+import 'package:formz/formz.dart';
+
 import '../../../../../data/service/forms_inputs/email_input.dart';
 import '../../../../../data/service/forms_inputs/password_input.dart';
 
@@ -8,6 +10,7 @@ class SignUpState {
   final bool showPassword;
   final String? errorMessage;
   final bool formStatus;
+  final FormzSubmissionStatus? status;
 
   const SignUpState(
       {this.passwordInput = const PasswordInput.pure(),
@@ -15,7 +18,8 @@ class SignUpState {
       this.formStatus = false,
       this.category = false,
       this.showPassword = false,
-      this.errorMessage});
+      this.errorMessage,
+      this.status = FormzSubmissionStatus.initial});
 
   SignUpState copyWith({
     EmailInput? emailInput,
@@ -24,6 +28,7 @@ class SignUpState {
     bool? showPassword,
     String? errorMessage,
     bool? formStatus,
+    FormzSubmissionStatus? status,
   }) {
     return SignUpState(
       emailInput: emailInput ?? this.emailInput,
@@ -32,6 +37,7 @@ class SignUpState {
       showPassword: showPassword ?? this.showPassword,
       errorMessage: errorMessage ?? this.errorMessage,
       formStatus: formStatus ?? this.formStatus,
+      status: status ?? this.status,
     );
   }
 }
