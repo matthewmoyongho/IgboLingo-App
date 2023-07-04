@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart';
 
-import './presentation/screens/home_screen.dart';
+import './domain/business_logic/blocs/authentication/authentication_view.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key, required this.repository}) : super(key: key);
+
+  final AuthenticationRepository repository;
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +14,12 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'IgboLingo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(
-        title: 'IgboLingua',
+      home: AuthenticationView(
+        repository: repository,
       ),
+      // const HomeScreen(
+      //   title: 'IgboLingua',
+      // ),
     );
   }
 }
