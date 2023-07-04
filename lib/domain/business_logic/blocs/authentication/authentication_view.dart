@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_bloc.dart';
-import 'package:igbo_lang_tutor/presentation/screens/splash_screen.dart';
+import 'package:igbo_lang_tutor/presentation/screens/onboarding/onboarding_screen.dart';
 
 import '../../../../data/repositories/authentication_repository.dart';
 
@@ -24,7 +24,7 @@ class AuthenticationView extends StatelessWidget {
                   AuthenticationBloc(repository: _repository),
             ),
           ],
-          child: SplashScreen(),
+          child: OnboardingScreen(),
         ));
   }
 }
