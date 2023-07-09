@@ -7,8 +7,8 @@ import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubi
 import '../../core/constants.dart';
 import '../../domain/business_logic/blocs/sign_up/sign_up_state.dart';
 
-class SignUpForm extends StatelessWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+class LoginForm extends StatelessWidget {
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,20 @@ class SignUpForm extends StatelessWidget {
         ),
         _passwordField(),
         const SizedBox(
+          height: 10,
+        ),
+        Container(
+            width: double.infinity,
+            alignment: Alignment.centerRight,
+            child: _forgotPassword()),
+        const SizedBox(
           height: 60,
         ),
-        _registerButton(deviceSize),
+        _submitButton(deviceSize),
         const SizedBox(
           height: 20,
         ),
-        _loginButton(),
+        _signupButton(),
         const SizedBox(
           height: 35,
         ),
@@ -41,11 +48,11 @@ class SignUpForm extends StatelessWidget {
                 thickness: 0.8,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            Text('Or'),
-            SizedBox(
+            const Text('Or'),
+            const SizedBox(
               width: 10,
             ),
             Expanded(
@@ -93,10 +100,10 @@ class _emailField extends StatelessWidget {
               height: 7,
             ),
             TextField(
-              key: Key('email_input_field'),
+              key: const Key('login_email_input_field'),
               textInputAction: TextInputAction.next,
               onChanged: (val) => context.read<SignUpCubit>().emailChanged(val),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
                   border: OutlineInputBorder(),
                   isDense: true),
@@ -136,12 +143,12 @@ class _passwordField extends StatelessWidget {
               height: 7,
             ),
             TextField(
-              key: const Key('password_input_field'),
+              key: const Key('login_password_input_field'),
               textInputAction: TextInputAction.next,
               onChanged: (val) =>
                   context.read<SignUpCubit>().passwordChanged(val),
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 isDense: true,
                 suffixIcon: Icon(state.showPassword
                     ? Icons.visibility
@@ -155,10 +162,10 @@ class _passwordField extends StatelessWidget {
   }
 }
 
-class _registerButton extends StatelessWidget {
+class _submitButton extends StatelessWidget {
   Size deviceSize;
 
-  _registerButton(this.deviceSize);
+  _submitButton(this.deviceSize);
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +178,7 @@ class _registerButton extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
         child: Text(
-          'Register',
+          'Login',
           style: GoogleFonts.poppins(fontSize: 14),
         ),
       );
@@ -179,8 +186,24 @@ class _registerButton extends StatelessWidget {
   }
 }
 
-class _loginButton extends StatelessWidget {
-  const _loginButton({Key? key}) : super(key: key);
+class _forgotPassword extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
+      return TextButton(
+        onPressed: () {},
+        child: Text(
+          'Forgot password',
+          style:
+              GoogleFonts.poppins(fontSize: 14, color: const Color(0XFF939292)),
+        ),
+      );
+    });
+  }
+}
+
+class _signupButton extends StatelessWidget {
+  const _signupButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -201,11 +224,11 @@ class _loginButton extends StatelessWidget {
                 // text: 'Already have an account?',
                 children: [
                   TextSpan(
-                      text: 'Already have an account?',
+                      text: 'Don\'t have an account?',
                       style:
                           GoogleFonts.poppins(fontSize: 14, color: kTextColor)),
                   TextSpan(
-                      text: ' Login',
+                      text: ' Sign up',
                       style: GoogleFonts.poppins(
                           fontSize: 14, color: kPrimaryColor),
                       recognizer: TapGestureRecognizer()..onTap = () {})
