@@ -41,105 +41,107 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           itemBuilder: (context, index) => Container(
             color: kSecondaryColor,
             width: double.infinity,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                    // height: 60,
+            child: Column(
+              children: [
+                SizedBox(
+                  // height: 20,
+                  // height: 60,
+                  height: deviceSize.height * 0.060,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      onboardingIndex > 0
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _pageController.previousPage(
+                                      duration: Duration(milliseconds: 100),
+                                      curve: Curves.bounceIn);
+                                });
+                              },
+                              icon: Icon(Icons.arrow_back))
+                          : Expanded(child: SizedBox()),
+                      const SkipButton(),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        onboardingIndex > 0
-                            ? IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _pageController.previousPage(
-                                        duration: Duration(milliseconds: 100),
-                                        curve: Curves.bounceIn);
-                                  });
-                                },
-                                icon: Icon(Icons.arrow_back))
-                            : Expanded(child: SizedBox()),
-                        const SkipButton(),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                    // height: 91,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                    child: Container(
-                      color: Colors.red,
-                      width: double.infinity,
-                      height: 200,
-                      child: Image(
-                        image: AssetImage(
-                          kOnBoardingContents[onboardingIndex]['picture'],
-                        ),
+                ),
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                  child: Container(
+                    // color: Colors.red,
+                    width: double.infinity,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage(
+                        kOnBoardingContents[onboardingIndex]['picture'],
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 35,
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 36),
+                  child: Text(
+                    kOnBoardingContents[onboardingIndex]['title'],
+                    style: GoogleFonts.irishGrover(
+                      color: Color(0XFF060606),
+                      height: 1.2,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 36),
-                    child: Text(
-                      kOnBoardingContents[index]['title'],
-                      style: GoogleFonts.irishGrover(
-                        color: Color(0XFF060606),
-                        height: 1.2,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w300,
-                      ),
-                      textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 36),
+                  child: Text(
+                    kOnBoardingContents[onboardingIndex]['body'],
+                    style: GoogleFonts.poppins(
+                      color: Color(0XFF060606).withOpacity(0.7),
+                      height: 1.2,
+                      fontSize: 12,
+                      // fontWeight: FontWeight.w300,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  // height: 90,
+                  height: deviceSize.height * 0.134,
+                ),
+                buildDots(context, onboardingIndex, kPrimaryColor),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: buildElevatedButton(
+                    deviceSize,
+                    onboardingIndex,
+                    () => setState(
+                      () {
+                        _pageController.nextPage(
+                            duration: Duration(milliseconds: 100),
+                            curve: Curves.bounceIn);
+                      },
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 36),
-                    child: Text(
-                      kOnBoardingContents[index]['body'],
-                      style: GoogleFonts.poppins(
-                        color: Color(0XFF060606).withOpacity(0.7),
-                        height: 1.2,
-                        fontSize: 12,
-                        // fontWeight: FontWeight.w300,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 90,
-                  ),
-                  buildDots(context, onboardingIndex, kPrimaryColor),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
-                    child: buildElevatedButton(
-                      deviceSize,
-                      onboardingIndex,
-                      () => setState(
-                        () {
-                          _pageController.nextPage(
-                              duration: Duration(milliseconds: 100),
-                              curve: Curves.bounceIn);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: deviceSize.height * 0.080,
+                )
+              ],
             ),
           ),
         ),
