@@ -58,12 +58,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               onPressed: () {
                                 setState(() {
                                   _pageController.previousPage(
-                                      duration: Duration(milliseconds: 100),
+                                      duration:
+                                          const Duration(milliseconds: 100),
                                       curve: Curves.bounceIn);
                                 });
                               },
-                              icon: Icon(Icons.arrow_back))
-                          : Expanded(child: SizedBox()),
+                              icon: const Icon(Icons.arrow_back))
+                          : const Expanded(child: SizedBox()),
                       const SkipButton(),
                     ],
                   ),
@@ -84,15 +85,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 35,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 36),
+                  padding: const EdgeInsets.symmetric(horizontal: 36),
                   child: Text(
                     kOnBoardingContents[onboardingIndex]['title'],
                     style: GoogleFonts.irishGrover(
-                      color: Color(0XFF060606),
+                      color: const Color(0XFF060606),
                       height: 1.2,
                       fontSize: 25,
                       fontWeight: FontWeight.w300,
@@ -100,15 +101,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 36),
+                  padding: const EdgeInsets.symmetric(horizontal: 36),
                   child: Text(
                     kOnBoardingContents[onboardingIndex]['body'],
                     style: GoogleFonts.poppins(
-                      color: Color(0XFF060606).withOpacity(0.7),
+                      color: const Color(0XFF060606).withOpacity(0.7),
                       height: 1.2,
                       fontSize: 12,
                       // fontWeight: FontWeight.w300,
@@ -121,7 +122,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   height: deviceSize.height * 0.134,
                 ),
                 buildDots(context, onboardingIndex, kPrimaryColor),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
@@ -132,10 +133,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     () => setState(
                       () {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 100),
+                            duration: const Duration(milliseconds: 100),
                             curve: Curves.bounceIn);
                       },
                     ),
+                    context,
                   ),
                 ),
                 SizedBox(

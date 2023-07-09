@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
+import 'package:igbo_lang_tutor/presentation/screens/sign_up.dart';
 
 List<Map> kOnBoardingContents = [
   {
@@ -69,15 +70,19 @@ Widget buildDots(BuildContext context, int onBoardingIndex, Color color) {
 }
 
 ElevatedButton buildElevatedButton(
-    Size deviceSize, int onboardingIndex, Function() callback) {
+  Size deviceSize,
+  int onboardingIndex,
+  Function() callback,
+  BuildContext context,
+) {
   return ElevatedButton(
     onPressed: onboardingIndex + 1 < kOnBoardingContents.length
         ? callback
         : () async {
             // final prefs = await SharedPreferences.getInstance();
             //  prefs.setBool('showHome', true);
-            //  Navigator.of(context)
-            //      .pushReplacementNamed(kSignUpScreenRoute);
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => SignUp()));
           },
     style: ElevatedButton.styleFrom(
         primary: kPrimaryColor,

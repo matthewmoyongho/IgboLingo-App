@@ -8,7 +8,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final repository = AuthenticationRepository();
+  bool showHome = false;
   runApp(App(
     repository: repository,
+    showHome: showHome,
   ));
 }

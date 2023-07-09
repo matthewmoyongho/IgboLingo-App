@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
+import 'package:igbo_lang_tutor/presentation/screens/login.dart';
 
 import '../../core/constants.dart';
 import '../../domain/business_logic/blocs/sign_up/sign_up_state.dart';
@@ -137,15 +138,21 @@ class _passwordField extends StatelessWidget {
             ),
             TextField(
               key: const Key('password_input_field'),
+              obscureText: state.showPassword,
               textInputAction: TextInputAction.next,
               onChanged: (val) =>
                   context.read<SignUpCubit>().passwordChanged(val),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 isDense: true,
-                suffixIcon: Icon(state.showPassword
-                    ? Icons.visibility
-                    : Icons.visibility_off),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    context.read<SignUpCubit>().updateShowPassword();
+                  },
+                  child: Icon(state.showPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                ),
               ),
             ),
           ],
@@ -164,7 +171,7 @@ class _registerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: state.formStatus == true ? () {} : null,
         style: ElevatedButton.styleFrom(
             primary: kPrimaryColor,
             shape:
@@ -205,10 +212,16 @@ class _loginButton extends StatelessWidget {
                       style:
                           GoogleFonts.poppins(fontSize: 14, color: kTextColor)),
                   TextSpan(
-                      text: ' Login',
-                      style: GoogleFonts.poppins(
-                          fontSize: 14, color: kPrimaryColor),
-                      recognizer: TapGestureRecognizer()..onTap = () {})
+                    text: ' Login',
+                    style:
+                        GoogleFonts.poppins(fontSize: 14, color: kPrimaryColor),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                          ),
+                  )
                 ],
               ),
             ),

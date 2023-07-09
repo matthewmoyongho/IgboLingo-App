@@ -2,7 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/login/login_cubit.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/login/login_state.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
+import 'package:igbo_lang_tutor/presentation/screens/sign_up.dart';
 
 import '../../core/constants.dart';
 import '../../domain/business_logic/blocs/sign_up/sign_up_state.dart';
@@ -75,7 +78,7 @@ class LoginForm extends StatelessWidget {
 class _emailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(
+    return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => current != previous,
       builder: (context, state) {
         return Column(
@@ -102,7 +105,7 @@ class _emailField extends StatelessWidget {
             TextField(
               key: const Key('login_email_input_field'),
               textInputAction: TextInputAction.next,
-              onChanged: (val) => context.read<SignUpCubit>().emailChanged(val),
+              onChanged: (val) => context.read<LoginCubit>().emailChanged(val),
               decoration: const InputDecoration(
                   //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
                   border: OutlineInputBorder(),
@@ -118,7 +121,7 @@ class _emailField extends StatelessWidget {
 class _passwordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(
+    return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => current != previous,
       builder: (context, state) {
         return Column(
@@ -146,7 +149,7 @@ class _passwordField extends StatelessWidget {
               key: const Key('login_password_input_field'),
               textInputAction: TextInputAction.next,
               onChanged: (val) =>
-                  context.read<SignUpCubit>().passwordChanged(val),
+                  context.read<LoginCubit>().passwordChanged(val),
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 isDense: true,
@@ -169,7 +172,7 @@ class _submitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
+    return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
@@ -189,7 +192,7 @@ class _submitButton extends StatelessWidget {
 class _forgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
+    return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       return TextButton(
         onPressed: () {},
         child: Text(
@@ -228,10 +231,16 @@ class _signupButton extends StatelessWidget {
                       style:
                           GoogleFonts.poppins(fontSize: 14, color: kTextColor)),
                   TextSpan(
-                      text: ' Sign up',
-                      style: GoogleFonts.poppins(
-                          fontSize: 14, color: kPrimaryColor),
-                      recognizer: TapGestureRecognizer()..onTap = () {})
+                    text: ' Sign up',
+                    style:
+                        GoogleFonts.poppins(fontSize: 14, color: kPrimaryColor),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const SignUp(),
+                            ),
+                          ),
+                  )
                 ],
               ),
             ),

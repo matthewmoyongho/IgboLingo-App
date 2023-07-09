@@ -1,25 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart';
 
-import './domain/business_logic/blocs/authentication/authentication_view.dart';
+import './domain/business_logic/blocs/authentication/authentication_bloc.dart';
+import './domain/business_logic/blocs/authentication/authentication_state.dart';
+import './domain/business_logic/blocs/login/login_cubit.dart';
+import './domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
+import './presentation/screens/home_screen.dart';
+import './presentation/screens/onboarding/onboarding_screen.dart';
+import './presentation/screens/sign_up.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.repository}) : super(key: key);
-
+  const App({Key? key, required this.repository, required this.showHome})
+      : super(key: key);
+  final bool showHome;
   final AuthenticationRepository repository;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'IgboLingo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: AuthenticationView(
-        repository: repository,
+    return RepositoryProvider.value(
+      value: (context) => repository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (BuildContext context) =>
+                AuthenticationBloc(repository: repository),
+          ),
+          BlocProvider<SignUpCubit>(
+            create: (BuildContext context) => SignUpCubit(repository),
+          ),
+          BlocProvider<LoginCubit>(
+              create: (BuildContext context) => LoginCubit(repository))
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'IgboLingo',
+          theme: ThemeData(primarySwatch: Colors.blue),
+          home: showHome
+              ? BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  buildWhen: (previous, current) => current != previous,
+                  builder: (ctx, state) {
+                    return state.authStatus ==
+                            AuthenticationStatus.authenticated
+                        ? const HomeScreen(
+                            title: 'Home',
+                          )
+                        : SignUp();
+                  })
+              : OnboardingScreen(),
+        ),
       ),
-      // const HomeScreen(
-      //   title: 'IgboLingua',
-      // ),
     );
   }
 }
