@@ -171,7 +171,12 @@ class _registerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
       return ElevatedButton(
-        onPressed: state.formStatus == true ? () {} : null,
+        onPressed: state.formStatus == true
+            ? () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                final user = await context.read<SignUpCubit>().signUp();
+              }
+            : null,
         style: ElevatedButton.styleFrom(
             primary: kPrimaryColor,
             shape:

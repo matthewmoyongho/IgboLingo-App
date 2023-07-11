@@ -33,9 +33,9 @@ class LoginForm extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: _forgotPassword()),
         const SizedBox(
-          height: 60,
+          height: 40,
         ),
-        _submitButton(deviceSize),
+        _loginButton(deviceSize),
         const SizedBox(
           height: 20,
         ),
@@ -153,9 +153,12 @@ class _passwordField extends StatelessWidget {
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 isDense: true,
-                suffixIcon: Icon(state.showPassword
-                    ? Icons.visibility
-                    : Icons.visibility_off),
+                suffixIcon: GestureDetector(
+                  onTap: () => context.read<LoginCubit>().updateShowPassword(),
+                  child: Icon(state.showPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                ),
               ),
             ),
           ],
@@ -165,16 +168,21 @@ class _passwordField extends StatelessWidget {
   }
 }
 
-class _submitButton extends StatelessWidget {
+class _loginButton extends StatelessWidget {
   Size deviceSize;
 
-  _submitButton(this.deviceSize);
+  _loginButton(this.deviceSize);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: state.emailInput.isNotValid
+            ? null
+            : () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                await context.read<LoginCubit>().login();
+              },
         style: ElevatedButton.styleFrom(
             primary: kPrimaryColor,
             shape:

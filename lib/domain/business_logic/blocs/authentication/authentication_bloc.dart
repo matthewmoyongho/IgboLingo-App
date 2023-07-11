@@ -11,7 +11,7 @@ class AuthenticationBloc
   final AuthenticationRepository _repository;
   AuthenticationBloc({required AuthenticationRepository repository})
       : _repository = repository,
-        super(repository.currentUser.isNotEmty
+        super(repository.currentUser.isNotEmpty
             ? AuthenticationState.authenticated(repository.currentUser)
             : AuthenticationState.unAuthenticated()) {
     on<UserChanged>(_userChanged);
@@ -20,7 +20,7 @@ class AuthenticationBloc
 
   void _userChanged(
       UserChanged event, Emitter<AuthenticationState> emit) async {
-    emit(event.user.isNotEmty
+    emit(event.user.isNotEmpty
         ? AuthenticationState.authenticated(event.user)
         : AuthenticationState.unAuthenticated());
   }

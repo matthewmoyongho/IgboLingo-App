@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart';
@@ -7,7 +8,6 @@ import './domain/business_logic/blocs/authentication/authentication_state.dart';
 import './domain/business_logic/blocs/login/login_cubit.dart';
 import './domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
 import './presentation/screens/home_screen.dart';
-import './presentation/screens/onboarding/onboarding_screen.dart';
 import './presentation/screens/sign_up.dart';
 
 class App extends StatelessWidget {
@@ -33,22 +33,30 @@ class App extends StatelessWidget {
               create: (BuildContext context) => LoginCubit(repository))
         ],
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'IgboLingo',
-          theme: ThemeData(primarySwatch: Colors.blue),
-          home: showHome
-              ? BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                  buildWhen: (previous, current) => current != previous,
-                  builder: (ctx, state) {
-                    return state.authStatus ==
-                            AuthenticationStatus.authenticated
-                        ? const HomeScreen(
-                            title: 'Home',
-                          )
-                        : SignUp();
-                  })
-              : OnboardingScreen(),
-        ),
+            debugShowCheckedModeBanner: false,
+            title: 'IgboLingo',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home:
+                // showHome ?
+                BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    buildWhen: (previous, current) => current != previous,
+                    builder: (ctx, state) {
+                      //   return state.authStatus ==
+                      //           AuthenticationStatus.authenticated
+                      //       ? const HomeScreen(
+                      //           title: 'Home',
+                      //         )
+                      //       : const SignUp();
+                      //
+                      return StreamBuilder<User?>(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (cxt, snapshot) => snapshot.hasData
+                            ? const HomeScreen(title: 'title')
+                            : SignUp(),
+                      );
+                    })
+            // : const OnboardingScreen(),
+            ),
       ),
     );
   }

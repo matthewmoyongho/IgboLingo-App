@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_event.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -13,9 +16,7 @@ class _MyHomePageState extends State<HomeScreen> {
   int _counter = 0;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    context.read<AuthenticationBloc>().add(LogoutRequest());
   }
 
   @override

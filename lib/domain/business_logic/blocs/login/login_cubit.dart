@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:igbo_lang_tutor/data/service/forms_inputs/password_input.dart';
 
 import '../../../../data/repositories/authentication_repository.dart';
 import '../../../../data/service/forms_inputs/email_input.dart';
@@ -20,11 +21,20 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void passwordChanged(String value) {
-    final password = EmailInput.dirty(value);
+    final password = PasswordInput.dirty(value);
     emit(
       state.copyWith(
-        emailInput: password,
-        formStatus: Formz.validate([password, state.passwordInput]),
+        passwordInput: password,
+        formStatus: Formz.validate([password, state.emailInput]),
+      ),
+    );
+  }
+
+  void updateShowPassword() {
+    emit(
+      state.copyWith(
+        showPassword: !state.showPassword,
+        formStatus: Formz.validate([state.emailInput, state.passwordInput]),
       ),
     );
   }
