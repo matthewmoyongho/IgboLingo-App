@@ -9,8 +9,8 @@ class Video {
 
   factory Video.fromJson(DocumentSnapshot json) {
     return Video(
-        name: json['name'],
-        mediaUrl: json['thumbnail'],
-        description: json['mediaUrl']);
+        name: json['title'],
+        mediaUrl: json['videoUrl'],
+        description: json['description']);
   }
 }
