@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dart';
+import 'package:igbo_lang_tutor/presentation/screens/tab_widget.dart';
 
 import './domain/business_logic/blocs/authentication/authentication_bloc.dart';
 import './domain/business_logic/blocs/authentication/authentication_state.dart';
 import './domain/business_logic/blocs/login/login_cubit.dart';
 import './domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
-import './presentation/screens/home_screen.dart';
 import './presentation/screens/sign_up.dart';
 import 'data/repositories/lecture_repository.dart';
 
@@ -61,7 +61,7 @@ class App extends StatelessWidget {
                       return StreamBuilder<User?>(
                         stream: FirebaseAuth.instance.authStateChanges(),
                         builder: (cxt, snapshot) => snapshot.hasData
-                            ? const HomeScreen(title: 'title')
+                            ? const TabWidget(title: 'title')
                             : SignUp(),
                       );
                     })
