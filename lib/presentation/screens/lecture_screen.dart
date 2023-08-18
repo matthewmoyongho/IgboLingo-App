@@ -1,25 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_event.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_state.dart';
-import 'package:igbo_lang_tutor/presentation/screens/video_player.dart';
-import 'package:video_player/video_player.dart';
+import 'package:igbo_lang_tutor/core/constants.dart';
 
-class LectureScreen extends StatefulWidget {
-  const LectureScreen({Key? key}) : super(key: key);
-
-  @override
-  State<LectureScreen> createState() => _LectureScreenState();
-}
-
-class _LectureScreenState extends State<LectureScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<VideoBloc>().add(LoadVideos());
-  }
+class LectureScreen extends StatelessWidget {
+  const LectureScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,44 +21,69 @@ class _LectureScreenState extends State<LectureScreen> {
             const SizedBox(
               height: 25,
             ),
-            BlocBuilder<VideoBloc, VideoState>(
-              builder: (context, state) {
-                if (state is VideosLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                return Column(
-                    children: List.generate(state.videos.length, (index) {
-                  final video = state.videos[index];
-                  return Material(
-                    borderRadius: BorderRadius.circular(5),
-                    elevation: 2,
-                    child: ListTile(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => VideoScreen(
-                            video: video,
-                            videoPlayerController:
-                                VideoPlayerController.asset('assets/video.mp4'),
-                          ),
-                        ),
-                      ),
-                      leading: const Text('\u{1F3AC}',
-                          style: TextStyle(fontSize: 40, color: Colors.blue)),
-                      title: Text(
-                        video.name,
-                        style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                          '${video.description.substring(0, video.description.length < 50 ? video.description.length : 50)}...'),
+            Container(
+              child: Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  children: [
+                    LectureTile(
+                      text: 'Greetings',
+                      color: kPrimaryColor,
                     ),
-                  );
-                }));
-              },
-            ),
+                    LectureTile(
+                      text: 'Counting',
+                      color: kPrimaryColor,
+                    ),
+                    LectureTile(
+                      text: 'Names',
+                      color: kPrimaryColor,
+                    ),
+                    LectureTile(
+                      text: 'Simple Sentences',
+                      color: kPrimaryColor,
+                    ),
+                    LectureTile(
+                      text: 'Greetings',
+                      color: kPrimaryColor,
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LectureTile extends StatelessWidget {
+  LectureTile({
+    super.key,
+    required this.text,
+    required this.color,
+  });
+
+  String text;
+  Color color;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 186,
+      width: 110,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text,
+            style: GoogleFonts.roboto(color: kSecondaryColor, fontSize: 30),
+          ),
         ),
       ),
     );

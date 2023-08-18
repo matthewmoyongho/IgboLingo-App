@@ -16,3 +16,9 @@ class UserChanged extends AuthenticationEvent {
   @override
   List<Object?> get props => [user];
 }
+
+class LoadUser extends AuthenticationEvent {
+  LoadUser();
+  @override
+  List<Object?> get props => [];
+}

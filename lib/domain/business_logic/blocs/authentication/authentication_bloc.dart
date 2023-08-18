@@ -29,4 +29,6 @@ class AuthenticationBloc
     unawaited(_repository.logout());
     emit(AuthenticationState.unAuthenticated());
   }
+
+  // void _loadUserDetails()
 }

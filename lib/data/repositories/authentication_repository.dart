@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -67,11 +68,18 @@ class LoginWithEmailAndPasswordError implements Exception {
 class AuthenticationRepository {
   FirebaseAuth _firebaseAuth;
   CacheClient _cacheClient;
+  final FirebaseFirestore _firestore;
+  final String _uid;
 
   AuthenticationRepository(
-      {FirebaseAuth? firebaseAuth, CacheClient? cacheClient})
+      {String? uid,
+      FirebaseAuth? firebaseAuth,
+      FirebaseFirestore? firestore,
+      CacheClient? cacheClient})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _cacheClient = cacheClient ?? CacheClient();
+        _firestore = firestore ?? FirebaseFirestore.instance,
+        _cacheClient = cacheClient ?? CacheClient(),
+        _uid = uid ?? FirebaseAuth.instance.currentUser!.uid;
 
   bool isWeb = kIsWeb;
 
@@ -122,6 +130,19 @@ class AuthenticationRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<appUser.User?> getUserDetails() async {
+    appUser.User? user;
+    try {
+      DocumentSnapshot<Object?> snapshot =
+          await _firestore.collection('User').doc(_uid).get();
+
+      user = appUser.User.fromJson(snapshot.data() as DocumentSnapshot<Object>);
+    } catch (e) {
+      print(e);
+    }
+    return user;
   }
 }
 

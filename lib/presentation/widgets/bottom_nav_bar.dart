@@ -42,7 +42,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           label: 'Quiz',
         ),
         BottomNavigationBarItem(
-          backgroundColor: Color(0XFF1B2A47),
+          backgroundColor: kSecondaryColor,
           icon: Icon(
             Icons.settings,
           ),
@@ -51,9 +51,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ],
       type: BottomNavigationBarType.fixed,
       currentIndex: widget.currentIndex,
-      backgroundColor: kPrimaryColor,
-      selectedItemColor: kSecondaryColor,
-      unselectedItemColor: kSecondaryColor,
+      backgroundColor: kSecondaryColor,
+      selectedItemColor: kPrimaryColor,
+      unselectedItemColor: kPrimaryColor,
       selectedLabelStyle: const TextStyle(color: kSecondaryColor),
       unselectedLabelStyle: const TextStyle(color: kSecondaryColor),
       showSelectedLabels: true,

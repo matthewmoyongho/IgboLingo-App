@@ -9,6 +9,7 @@ import 'package:igbo_lang_tutor/presentation/screens/quiz_screen.dart';
 import 'package:igbo_lang_tutor/presentation/widgets/bottom_nav_bar.dart';
 
 import './lecture_screen.dart';
+import '../../domain/business_logic/blocs/authentication/authentication_state.dart';
 
 class TabWidget extends StatefulWidget {
   const TabWidget({super.key, required this.title});
@@ -37,13 +38,21 @@ class _TabWidgetState extends State<TabWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kSecondaryColor,
-        body: tabScreens[_navIndex],
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: _navIndex,
-          onTap: _ontap,
-        )
-        //, onTap: _ontap),
-        );
+      backgroundColor: kSecondaryColor,
+      body: tabScreens[_navIndex],
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _navIndex,
+        onTap: _ontap,
+      ),
+      //, onTap: _ontap),
+      floatingActionButton:
+          BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return FloatingActionButton(onPressed: () {
+            context.read<AuthenticationBloc>().add(LogoutRequest());
+          });
+        },
+      ),
+    );
   }
 }
