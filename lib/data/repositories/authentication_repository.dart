@@ -69,7 +69,6 @@ class AuthenticationRepository {
   FirebaseAuth _firebaseAuth;
   CacheClient _cacheClient;
   final FirebaseFirestore _firestore;
-  final String _uid;
 
   AuthenticationRepository(
       {String? uid,
@@ -78,8 +77,7 @@ class AuthenticationRepository {
       CacheClient? cacheClient})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance,
-        _cacheClient = cacheClient ?? CacheClient(),
-        _uid = uid ?? FirebaseAuth.instance.currentUser!.uid;
+        _cacheClient = cacheClient ?? CacheClient();
 
   bool isWeb = kIsWeb;
 
@@ -132,18 +130,18 @@ class AuthenticationRepository {
     }
   }
 
-  Future<appUser.User?> getUserDetails() async {
-    appUser.User? user;
-    try {
-      DocumentSnapshot<Object?> snapshot =
-          await _firestore.collection('User').doc(_uid).get();
-
-      user = appUser.User.fromJson(snapshot.data() as DocumentSnapshot<Object>);
-    } catch (e) {
-      print(e);
-    }
-    return user;
-  }
+  // Future<appUser.User?> getUserDetails() async {
+  //   appUser.User? user;
+  //   try {
+  //     DocumentSnapshot<Object?> snapshot =
+  //         await _firestore.collection('User').doc(_uid).get();
+  //
+  //     user = appUser.User.fromJson(snapshot.data() as DocumentSnapshot<Object>);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   return user;
+  // }
 }
 
 extension on User {

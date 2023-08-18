@@ -33,7 +33,7 @@ class _TabWidgetState extends State<TabWidget> {
     });
   }
 
-  List tabScreens = [HomeScreen(), LectureScreen(), QuizScreen(), Profile()];
+  List tabScreens = [const HomeScreen(), LectureScreen(), QuizScreen(), Profile()];
 
   @override
   Widget build(BuildContext context) {
