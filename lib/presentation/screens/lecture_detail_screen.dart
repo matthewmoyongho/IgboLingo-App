@@ -5,7 +5,6 @@ import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dar
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_event.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_state.dart';
 import 'package:igbo_lang_tutor/presentation/screens/video_player.dart';
-import 'package:video_player/video_player.dart';
 
 class LectureDetailScreen extends StatefulWidget {
   const LectureDetailScreen({Key? key}) : super(key: key);
@@ -54,11 +53,7 @@ class _LectureDetailScreenState extends State<LectureDetailScreen> {
                     child: ListTile(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => VideoScreen(
-                            video: video,
-                            videoPlayerController:
-                                VideoPlayerController.asset('assets/video.mp4'),
-                          ),
+                          builder: (context) => VideoScreen(),
                         ),
                       ),
                       leading: const Text('\u{1F3AC}',
