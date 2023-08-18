@@ -5,7 +5,8 @@ import '../models/user.dart' as localUser;
 
 class UserRepository {
   final FirebaseFirestore _firestore;
-  final String _uid;
+  final String? _uid;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   UserRepository({FirebaseFirestore? firestore, String? uid})
       : _firestore = firestore ?? FirebaseFirestore.instance,
@@ -41,9 +42,9 @@ class UserRepository {
     final usersRef = _firestore.collection('User');
 
     try {
-      usersRef.add(
-        localUser.User.toMap(user),
-      );
+      usersRef.doc(user.id).set(
+            localUser.User.toMap(user),
+          );
     } catch (e) {
       rethrow;
     }

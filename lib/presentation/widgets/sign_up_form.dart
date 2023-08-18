@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:igbo_lang_tutor/data/models/user.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
 import 'package:igbo_lang_tutor/presentation/screens/login.dart';
 
 import '../../core/constants.dart';
 import '../../domain/business_logic/blocs/sign_up/sign_up_state.dart';
+import '../../domain/business_logic/blocs/user/user_bloc.dart';
+import '../../domain/business_logic/blocs/user/user_event.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -170,23 +174,47 @@ class _registerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
-      return ElevatedButton(
-        onPressed: state.formStatus == true
-            ? () async {
-                FocusManager.instance.primaryFocus?.unfocus();
-                final user = await context.read<SignUpCubit>().signUp();
-              }
-            : null,
-        style: ElevatedButton.styleFrom(
-            primary: kPrimaryColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
-        child: Text(
-          'Register',
-          style: GoogleFonts.poppins(fontSize: 14),
-        ),
-      );
+      return state.status == FormzSubmissionStatus.inProgress
+          ? const CircularProgressIndicator(
+              color: kPrimaryColor,
+            )
+          : ElevatedButton(
+              onPressed: state.formStatus == true
+                  ? () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      final User user;
+                      final firebaseUser =
+                          await context.read<SignUpCubit>().signUp();
+                      if (firebaseUser != null) {
+                        user = User(
+                          id: firebaseUser.uid,
+                          name: firebaseUser.displayName,
+                          email: firebaseUser.email,
+                          photoUrl: firebaseUser.photoURL,
+                          phone: firebaseUser.phoneNumber,
+                        );
+                        print(firebaseUser.uid);
+                        print(firebaseUser.photoURL);
+                        print(firebaseUser.photoURL);
+                        print(firebaseUser.displayName);
+                        print(firebaseUser.email);
+
+                        context.read<UserBloc>().add(
+                              AddUser(user),
+                            );
+                      }
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                  primary: kPrimaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+              child: Text(
+                'Register',
+                style: GoogleFonts.poppins(fontSize: 14),
+              ),
+            );
     });
   }
 }

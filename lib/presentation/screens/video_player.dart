@@ -1,9 +1,13 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:igbo_lang_tutor/core/constants.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../data/models/video.dart';
+import '../../domain/business_logic/blocs/video/video_bloc.dart';
+import '../../domain/business_logic/blocs/video/video_state.dart';
 
 // class VideoItem {
 //   final String title;
@@ -14,42 +18,8 @@ import '../../data/models/video.dart';
 //       {required this.title, required this.description, required this.videoUrl});
 // }
 
-class VideoScreen extends StatefulWidget {
-  final Video video;
-  final VideoPlayerController videoPlayerController;
-
-  VideoScreen({required this.video, required this.videoPlayerController});
-
-  @override
-  State<VideoScreen> createState() => _VideoScreenState();
-}
-
-class _VideoScreenState extends State<VideoScreen> {
-  late ChewieController _videoController;
+class VideoScreen extends StatelessWidget {
   final asset = 'assets/video.mp4';
-
-  @override
-  void initState() {
-    super.initState();
-    _videoController = ChewieController(
-        looping: true,
-        autoPlay: true,
-        videoPlayerController: VideoPlayerController.networkUrl(
-          Uri.parse(widget.video.mediaUrl),
-        )
-        // ..setLooping(true)
-        // ..initialize().then((value) => VideoPlayerController),
-        // autoPlay: true,
-        // looping: true,
-        );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoController.dispose();
-    widget.videoPlayerController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,32 +27,101 @@ class _VideoScreenState extends State<VideoScreen> {
       backgroundColor: Colors.black45,
       //kSecondaryColor,
       appBar: AppBar(
-        title: Text(widget.video.name),
+        title: Text('Enjoy your lectures'),
         backgroundColor: Colors.black45,
         elevation: 0,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Chewie(
-                controller: _videoController,
+        child: BlocBuilder<VideoBloc, VideoState>(
+          builder: (context, state) {
+            // context.read<VideoBloc>().add(LoadVideos());
+            if (state.videos.isEmpty) {
+              return const Center(
+                child: Text(
+                  'List is empty!',
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }
+            //List lectures= state.videos.where((element) => false)
+            return ListView(
+              children: List.generate(
+                state.videos.length,
+                (index) => VideoPlayerView(
+                  video: state.videos[index],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                widget.video.description,
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.white),
-              ),
-            ),
-          ],
+            );
+          },
         ),
+      ),
+    );
+  }
+}
+
+class VideoPlayerView extends StatefulWidget {
+  const VideoPlayerView({Key? key, required this.video}) : super(key: key);
+  final Video video;
+
+  @override
+  State<VideoPlayerView> createState() => _VideoPlayerViewState();
+}
+
+class _VideoPlayerViewState extends State<VideoPlayerView> {
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.networkUrl(
+      Uri.parse(widget.video.mediaUrl),
+    );
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: 16 / 9,
+      looping: true,
+      showControls: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _chewieController.dispose();
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(
+            color: Colors.white,
+          ),
+          Text(widget.video.name,
+              style: GoogleFonts.poppins(
+                color: kSecondaryColor,
+                fontSize: 18,
+              )),
+          AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Chewie(controller: _chewieController)),
+          const Divider(
+            color: Colors.white,
+          ),
+          Text(
+            widget.video.description,
+            style: GoogleFonts.poppins(
+              color: kSecondaryColor,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }

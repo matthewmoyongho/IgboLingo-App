@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/login/login_cubit.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/login/login_state.dart';
@@ -172,27 +173,40 @@ class _loginButton extends StatelessWidget {
   Size deviceSize;
 
   _loginButton(this.deviceSize);
+  // final spinkit = SpinKitFadingCircle(
+  //   itemBuilder: (BuildContext context, int index) {
+  //     return DecoratedBox(
+  //       decoration: BoxDecoration(
+  //         color: index.isEven ? Colors.red : Colors.blue[900],
+  //       ),
+  //     );
+  //   },
+  // );
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
-      return ElevatedButton(
-        onPressed: state.emailInput.isNotValid
-            ? null
-            : () async {
-                FocusManager.instance.primaryFocus?.unfocus();
-                await context.read<LoginCubit>().login();
-              },
-        style: ElevatedButton.styleFrom(
-            primary: kPrimaryColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
-        child: Text(
-          'Login',
-          style: GoogleFonts.poppins(fontSize: 14),
-        ),
-      );
+      return state.status == FormzSubmissionStatus.inProgress
+          ? const CircularProgressIndicator(
+              color: kPrimaryColor,
+            )
+          : ElevatedButton(
+              onPressed: state.emailInput.isNotValid
+                  ? null
+                  : () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      await context.read<LoginCubit>().login();
+                    },
+              style: ElevatedButton.styleFrom(
+                  primary: kPrimaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+              child: Text(
+                'Login',
+                style: GoogleFonts.poppins(fontSize: 14),
+              ),
+            );
     });
   }
 }

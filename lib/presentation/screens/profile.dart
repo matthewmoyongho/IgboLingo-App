@@ -230,6 +230,30 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10,
                             ),
+//Birth Info
+                            const Text(
+                              'GENDER:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.blueGrey),
+                            ),
+                            TextFormField(
+                              readOnly: true,
+                              initialValue: user.displayName,
+                              style: const TextStyle(fontSize: 18),
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.blueGrey,
+                                  width: 3,
+                                )),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
 //Target gp
                           ]),
                     ),

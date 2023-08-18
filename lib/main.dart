@@ -10,6 +10,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   final repository = AuthenticationRepository();
   final videoRepository = LectureRepository();
+
   bool showHome = false;
   runApp(App(
     repository: repository,

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart';
+import 'package:igbo_lang_tutor/data/repositories/user_repository.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dart';
 import 'package:igbo_lang_tutor/presentation/screens/tab_widget.dart';
 
@@ -13,12 +15,12 @@ import './presentation/screens/sign_up.dart';
 import 'data/repositories/lecture_repository.dart';
 
 class App extends StatelessWidget {
-  const App(
-      {Key? key,
-      required this.repository,
-      required this.showHome,
-      required this.videoRepository})
-      : super(key: key);
+  const App({
+    Key? key,
+    required this.repository,
+    required this.showHome,
+    required this.videoRepository,
+  }) : super(key: key);
   final bool showHome;
   final AuthenticationRepository repository;
   final LectureRepository videoRepository;
@@ -40,7 +42,11 @@ class App extends StatelessWidget {
               create: (BuildContext context) => LoginCubit(repository)),
           BlocProvider<VideoBloc>(
               create: (BuildContext context) =>
-                  VideoBloc(videoRepository: videoRepository))
+                  VideoBloc(videoRepository: videoRepository)),
+          BlocProvider<UserBloc>(
+              create: (BuildContext context) => UserBloc(
+                  repository: UserRepository(uid: repository.currentUser.id),
+                  uid: repository.currentUser.id))
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
