@@ -62,7 +62,7 @@ class User extends Equatable {
       result.addAll({'name': user.name});
     }
     if (user.phone != null) {
-      result.addAll({'name': user.phone});
+      result.addAll({'phone': user.phone});
     }
     result.addAll({'email': user.email});
     result.addAll({'photoUrl': user.photoUrl});

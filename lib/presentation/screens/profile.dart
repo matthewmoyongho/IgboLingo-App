@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_bloc.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_state.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_event.dart';
+
+import '../../domain/business_logic/blocs/user/user_state.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
@@ -80,8 +82,9 @@ class _ProfileState extends State<Profile> {
       //       ),
       //   ],
       // ),
-      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
+          context.read<UserBloc>().add(LoadUser());
           return Column(
             children: [
               Container(
@@ -194,121 +197,128 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 20,
               ),
-              Expanded(
-                child: ListView(children: [
-                  Container(
-                    height: deviceSize.height * 0.58,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'PHONE NO:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.blueGrey),
-                            ),
+              if (state is UserLoaded)
+                Expanded(
+                  child: ListView(children: [
+                    Container(
+                      height: deviceSize.height * 0.58,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'PHONE NO:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.blueGrey),
+                              ),
 
-                            TextFormField(
-                              maxLength: 11,
-                              readOnly: readOnly,
-                              initialValue: user.phoneNumber,
-                              style: const TextStyle(fontSize: 18),
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.blueGrey,
-                                  width: 3,
-                                )),
+                              TextFormField(
+                                maxLength: 11,
+                                readOnly: readOnly,
+                                initialValue: user.phoneNumber,
+                                style: const TextStyle(fontSize: 18),
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.next,
+                                decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.blueGrey,
+                                    width: 3,
+                                  )),
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 //Email Address
-                            const Text(
-                              'EMAIL ADDRESS:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.blueGrey),
-                            ),
-                            TextFormField(
-                              readOnly: true,
-                              initialValue: user.email ?? '',
-                              style: const TextStyle(fontSize: 18),
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.blueGrey,
-                                  width: 3,
-                                )),
+                              const Text(
+                                'EMAIL ADDRESS:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.blueGrey),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                              TextFormField(
+                                readOnly: true,
+                                initialValue: user.email ?? '',
+                                style: const TextStyle(fontSize: 18),
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.blueGrey,
+                                    width: 3,
+                                  )),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 //Birth Info
-                            const Text(
-                              'USERNAME:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.blueGrey),
-                            ),
-                            TextFormField(
-                              readOnly: true,
-                              initialValue: user.displayName,
-                              style: const TextStyle(fontSize: 18),
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.blueGrey,
-                                  width: 3,
-                                )),
+                              const Text(
+                                'USERNAME:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.blueGrey),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                              TextFormField(
+                                readOnly: true,
+                                initialValue: user.displayName,
+                                style: const TextStyle(fontSize: 18),
+                                textInputAction: TextInputAction.next,
+                                decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.blueGrey,
+                                    width: 3,
+                                  )),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 //Birth Info
-                            const Text(
-                              'GENDER:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.blueGrey),
-                            ),
-                            TextFormField(
-                              readOnly: true,
-                              initialValue: user.displayName,
-                              style: const TextStyle(fontSize: 18),
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.blueGrey,
-                                  width: 3,
-                                )),
+                              const Text(
+                                'GENDER:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.blueGrey),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                              TextFormField(
+                                readOnly: true,
+                                initialValue: user.displayName,
+                                style: const TextStyle(fontSize: 18),
+                                textInputAction: TextInputAction.next,
+                                decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.blueGrey,
+                                    width: 3,
+                                  )),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 //Target gp
-                          ]),
+                            ]),
+                      ),
                     ),
-                  ),
-                ]),
-              ),
+                  ]),
+                ),
+              if (state is UserLoading) CircularProgressIndicator(),
+              if (state is UserLoadingFailed)
+                Center(
+                  child: Text(
+                      'Could not load user details. Please refresh with a better network!'),
+                )
             ],
           );
         },

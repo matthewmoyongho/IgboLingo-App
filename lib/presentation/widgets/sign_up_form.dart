@@ -24,19 +24,27 @@ class SignUpForm extends StatelessWidget {
       children: [
         _emailField(),
         const SizedBox(
-          height: 20,
+          height: 10,
+        ),
+        _nameField(),
+        const SizedBox(
+          height: 10,
+        ),
+        _phoneField(),
+        const SizedBox(
+          height: 10,
         ),
         _passwordField(),
         const SizedBox(
-          height: 60,
+          height: 25,
         ),
         _registerButton(deviceSize),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         _loginButton(),
         const SizedBox(
-          height: 35,
+          height: 20,
         ),
         Row(
           children: [
@@ -62,7 +70,7 @@ class SignUpForm extends StatelessWidget {
           ],
         ),
         const SizedBox(
-          height: 40,
+          height: 20,
         ),
         _googleSignIn(deviceSize),
       ],
@@ -71,6 +79,95 @@ class SignUpForm extends StatelessWidget {
 }
 
 class _emailField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) => current != previous,
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.email_sharp,
+                    color: Color(0XFF000000),
+                  ),
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  Text(
+                    'Email',
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, color: const Color(0XFF000000)),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              TextField(
+                key: Key('email_input_field'),
+                textInputAction: TextInputAction.next,
+                onChanged: (val) =>
+                    context.read<SignUpCubit>().emailChanged(val),
+                decoration: InputDecoration(
+                    //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
+                    border: OutlineInputBorder(),
+                    isDense: true),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _nameField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) => current != previous,
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.account_circle,
+                  color: Color(0XFF000000),
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
+                Text(
+                  'Name',
+                  style: GoogleFonts.poppins(
+                      fontSize: 14, color: const Color(0XFF000000)),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            TextField(
+              key: Key('name_input_field'),
+              textInputAction: TextInputAction.next,
+              onChanged: (val) => context.read<SignUpCubit>().nameChanged(val),
+              decoration: InputDecoration(
+                  //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
+                  border: OutlineInputBorder(),
+                  isDense: true),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _phoneField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
@@ -88,7 +185,7 @@ class _emailField extends StatelessWidget {
                   width: 7,
                 ),
                 Text(
-                  'Email',
+                  'Phone',
                   style: GoogleFonts.poppins(
                       fontSize: 14, color: const Color(0XFF000000)),
                 ),
@@ -98,10 +195,11 @@ class _emailField extends StatelessWidget {
               height: 7,
             ),
             TextField(
-              key: Key('email_input_field'),
+              key: const Key('Phone_input_field'),
+              keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
-              onChanged: (val) => context.read<SignUpCubit>().emailChanged(val),
-              decoration: InputDecoration(
+              onChanged: (val) => context.read<SignUpCubit>().phoneChanged(val),
+              decoration: const InputDecoration(
                   //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
                   border: OutlineInputBorder(),
                   isDense: true),
@@ -188,10 +286,10 @@ class _registerButton extends StatelessWidget {
                       if (firebaseUser != null) {
                         user = User(
                           id: firebaseUser.uid,
-                          name: firebaseUser.displayName,
+                          name: state.nameInput.value.trim().toString(),
                           email: firebaseUser.email,
                           photoUrl: firebaseUser.photoURL,
-                          phone: firebaseUser.phoneNumber,
+                          phone: state.phoneInput.value.trim().toString(),
                         );
                         print(firebaseUser.uid);
                         print(firebaseUser.photoURL);

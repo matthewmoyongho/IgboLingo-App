@@ -36,7 +36,7 @@ class SignUp extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SingleChildScrollView(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +46,7 @@ class SignUp extends StatelessWidget {
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 20,
                     ),
                     SignUpForm(),
                   ],
