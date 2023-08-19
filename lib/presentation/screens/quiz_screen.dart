@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
+import 'package:igbo_lang_tutor/presentation/screens/questions_screen.dart';
 
 import '../widgets/lecture_tile.dart';
 
@@ -32,15 +33,15 @@ class _QuizState extends State<QuizScreen> {
             const SizedBox(
               height: 25,
             ),
-            // GestureDetector(
-            //   onTap: () => Navigator.of(context).push(
-            //       MaterialPageRoute(builder: (context) => QuestionsScreen())),
-            //   child: Container(
-            //     height: 50,
-            //     width: double.infinity,
-            //     color: kPrimaryColor,
-            //   ),
-            // ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => QuestionsScreen())),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                color: kPrimaryColor,
+              ),
+            ),
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,

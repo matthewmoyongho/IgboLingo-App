@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
+import 'package:igbo_lang_tutor/presentation/widgets/result.dart';
 
-class QuestionsScreen extends StatelessWidget {
+import '../widgets/quiz.dart';
+
+class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QuestionsScreen> createState() => _QuestionsScreenState();
+}
+
+class _QuestionsScreenState extends State<QuestionsScreen> {
+  int _questionIndex = 0;
+  int _totalScore = 0;
+
+  void _optionPressed(int score) {
+    setState(() {
+      _questionIndex++;
+      _totalScore += score;
+    });
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,117 +37,14 @@ class QuestionsScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.bottomCenter,
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  decoration: const BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(80),
-                      bottomRight: Radius.circular(80),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-                    child: Text(
-                      "Some text will go in here and will serve as the question for the number?",
-                      style: GoogleFonts.poppins(
-                          color: kSecondaryColor, fontSize: 16),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: -25,
-                  // right: 0,
-                  // left: 0,
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: Colors.grey, width: 2),
-                      color: kSecondaryColor,
-                    ),
-                    child: Text(
-                      '1',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 60,
-                  right: 25,
-                  // left: 0,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: kPrimaryColor,
-                      backgroundColor: kSecondaryColor,
-                    ),
-                    child: Text(
-                      'Next',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    OptionsTile(optionText: 'The options goes here!'),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    OptionsTile(optionText: 'The options goes here!'),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    OptionsTile(optionText: 'The options goes here!'),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    OptionsTile(optionText: 'The options goes here!'),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OptionsTile extends StatelessWidget {
-  final String optionText;
-  const OptionsTile({super.key, required this.optionText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(50),
-      elevation: 4,
-      child: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.08,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: kSecondaryColor,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Text(optionText),
+        child: _questionIndex < kQuestions.length
+            ? Quiz(
+                questions: kQuestions,
+                questionIndex: _questionIndex,
+                onPressed: _optionPressed,
+              )
+            : Result(_totalScore, () => _resetQuiz(),
+                _totalScore == kQuestions.length),
       ),
     );
   }

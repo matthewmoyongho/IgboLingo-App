@@ -85,7 +85,7 @@ class _ProfileState extends State<Profile> {
           return Column(
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(15, 15, 15, 30),
+                padding: const EdgeInsets.all(15),
                 height: deviceSize.height * 0.35,
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 25.0,
+                    top: 15.0,
                     right: 15,
                     left: 15,
                   ),
@@ -108,7 +108,7 @@ class _ProfileState extends State<Profile> {
                             color: kSecondaryColor),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 5,
                       ),
                       user?.photoURL == null
                           ? CircleAvatar(
@@ -137,7 +137,56 @@ class _ProfileState extends State<Profile> {
                             ),
                       const SizedBox(
                         width: 20,
-                      )
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                '0',
+                                style: GoogleFonts.poppins(
+                                    color: kSecondaryColor,
+                                    fontSize: 14,
+                                    decoration: TextDecoration.underline),
+                              ),
+                              Text(
+                                'lectures completed',
+                                style: GoogleFonts.poppins(
+                                    color: kSecondaryColor, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Container(
+                            width: 1,
+                            height: 40,
+                            color: kSecondaryColor,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '0',
+                                style: GoogleFonts.poppins(
+                                    color: kSecondaryColor,
+                                    fontSize: 14,
+                                    decoration: TextDecoration.underline),
+                              ),
+                              Text(
+                                'lectures completed',
+                                style: GoogleFonts.poppins(
+                                    color: kSecondaryColor, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
