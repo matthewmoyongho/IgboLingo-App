@@ -3,13 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_bloc.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_event.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_event.dart';
 import 'package:igbo_lang_tutor/presentation/screens/home_screen.dart';
 import 'package:igbo_lang_tutor/presentation/screens/profile.dart';
 import 'package:igbo_lang_tutor/presentation/screens/quiz_screen.dart';
 import 'package:igbo_lang_tutor/presentation/widgets/bottom_nav_bar.dart';
 
 import './lecture_screen.dart';
-import '../../domain/business_logic/blocs/authentication/authentication_state.dart';
+import '../../domain/business_logic/blocs/user/user_event.dart';
 
 class TabWidget extends StatefulWidget {
   const TabWidget({super.key, required this.title});
@@ -23,8 +26,29 @@ class TabWidget extends StatefulWidget {
 class _TabWidgetState extends State<TabWidget> {
   int _navIndex = 0;
 
-  void _incrementCounter() {
-    context.read<AuthenticationBloc>().add(LogoutRequest());
+  void _logout() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('About to be logged out'),
+        content: const Text('Would you like to proceed with logging out?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<AuthenticationBloc>().add(LogoutRequest());
+              Navigator.of(context).pop();
+            },
+            child: Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('No'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _ontap(int index) {
@@ -33,25 +57,43 @@ class _TabWidgetState extends State<TabWidget> {
     });
   }
 
-  List tabScreens = [const HomeScreen(), LectureScreen(), QuizScreen(), Profile()];
+  void _fetchDetails() {
+    context.read<VideoBloc>().add(LoadVideos());
+    context.read<UserBloc>().add(LoadUser());
+  }
+
+  void _startLearning() {
+    setState(() {
+      _navIndex = 1;
+    });
+  }
+
+  List tabScreens = [
+    //HomeScreen(),
+    LectureScreen(),
+    QuizScreen(),
+    Profile(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kSecondaryColor,
-      body: tabScreens[_navIndex],
+      body: _navIndex == 0
+          ? HomeScreen(
+              startLearning: _startLearning,
+              logout: _logout,
+            )
+          : tabScreens[_navIndex + 1],
       bottomNavigationBar: BottomNavBar(
         currentIndex: _navIndex,
         onTap: _ontap,
-      ),
-      //, onTap: _ontap),
-      floatingActionButton:
-          BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          return FloatingActionButton(onPressed: () {
-            context.read<AuthenticationBloc>().add(LogoutRequest());
-          });
-        },
       ),
     );
   }

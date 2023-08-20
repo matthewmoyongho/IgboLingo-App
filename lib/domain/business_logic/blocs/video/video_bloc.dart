@@ -21,14 +21,4 @@ class VideoBloc extends Bloc<VideosEvent, VideoState> {
       VideosLoaded(videos: videos),
     );
   }
-
-  // void _loadAllAssignments(
-  //     LoadAssignments event, Emitter<AssignmentState> emit) async {
-  //   emit(AssignmentsLoading());
-  //   List<Assignment> assignments = [];
-  //   assignments.addAll(await _assignmentRepository.getAllAssignment());
-  //   print('Loading length is ${assignments.length}');
-  //   emit(AssignmentsLoaded(assignments: assignments));
-  //   print('New state is loaded');
-  // }
 }

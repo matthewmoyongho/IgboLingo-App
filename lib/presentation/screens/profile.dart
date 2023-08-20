@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_event.dart';
 
 import '../../domain/business_logic/blocs/user/user_state.dart';
 
@@ -84,7 +83,8 @@ class _ProfileState extends State<Profile> {
       // ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          context.read<UserBloc>().add(LoadUser());
+          //context.read<UserBloc>().add(LoadUser());
+
           return Column(
             children: [
               Container(

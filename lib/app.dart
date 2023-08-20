@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import './presentation/screens/sign_up.dart';
 import 'data/repositories/lecture_repository.dart';
 
 class App extends StatelessWidget {
-  const App({
+  App({
     Key? key,
     required this.repository,
     required this.showHome,
@@ -24,6 +25,8 @@ class App extends StatelessWidget {
   final bool showHome;
   final AuthenticationRepository repository;
   final LectureRepository videoRepository;
+  final _uid = FirebaseAuth.instance.currentUser!.uid;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +47,10 @@ class App extends StatelessWidget {
               create: (BuildContext context) =>
                   VideoBloc(videoRepository: videoRepository)),
           BlocProvider<UserBloc>(
-              create: (BuildContext context) => UserBloc(
-                  repository: UserRepository(uid: repository.currentUser.id),
-                  uid: repository.currentUser.id))
+            create: (BuildContext context) => UserBloc(
+                uid: _uid,
+                repository: UserRepository(firestore: _firestore, uid: _uid)),
+          )
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

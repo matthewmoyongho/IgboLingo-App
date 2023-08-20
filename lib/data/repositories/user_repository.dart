@@ -14,12 +14,14 @@ class UserRepository {
 
   Future<localUser.User?> getUserDetails() async {
     localUser.User? user;
+    print(_uid);
+    print('I stated getting User details');
     try {
-      DocumentSnapshot<Object?> snapshot =
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
           await _firestore.collection('User').doc(_uid).get();
 
-      user =
-          localUser.User.fromJson(snapshot.data() as DocumentSnapshot<Object>);
+      user = localUser.User.fromJson(snapshot);
+      print('I got the details');
     } catch (e) {
       print(e);
     }

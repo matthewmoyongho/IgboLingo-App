@@ -19,7 +19,7 @@ class UpdateUser extends UserEvent {
 }
 
 class AddUser extends UserEvent {
-  User user;
+  final User user;
   AddUser(this.user);
 
   @override

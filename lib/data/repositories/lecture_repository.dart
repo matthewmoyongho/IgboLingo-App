@@ -11,17 +11,13 @@ class LectureRepository {
     List<Video> videos = [];
 
     try {
-      print('I started');
-      QuerySnapshot snapshot = await _storage
-          .collection('Topics')
-          .doc('KLz8HvCYKG0O2IKLINjr')
-          .collection('Greetings')
-          .get();
+      QuerySnapshot snapshot = await _storage.collection('Courses').get();
       for (var doc in snapshot.docs) {
         videos.add(Video.fromJson(doc));
       }
     } catch (e) {
       print('Operation failed');
+      rethrow;
     }
 
     return videos;

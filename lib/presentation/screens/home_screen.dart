@@ -2,28 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_bloc.dart';
-import 'package:igbo_lang_tutor/domain/business_logic/blocs/authentication/authentication_event.dart';
-import 'package:igbo_lang_tutor/presentation/screens/lecture_screen.dart';
+import 'package:igbo_lang_tutor/data/models/video.dart';
 
+import '../../domain/business_logic/blocs/video/video_bloc.dart';
+import '../../domain/business_logic/blocs/video/video_state.dart';
 import '../widgets/lecture_tile.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
-
-  @override
-  State<HomeScreen> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<HomeScreen> {
-  int _navIndex = 0;
-
-  void _incrementCounter() {
-    context.read<AuthenticationBloc>().add(LogoutRequest());
-  }
-
+class HomeScreen extends StatelessWidget {
+  HomeScreen({required this.startLearning, required this.logout});
+  void Function() startLearning;
+  void Function() logout;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,10 +22,16 @@ class _MyHomePageState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Home',
-              style:
-                  GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Home',
+                  style: GoogleFonts.roboto(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                IconButton(onPressed: logout, icon: Icon(Icons.logout))
+              ],
             ),
             const SizedBox(
               height: 25,
@@ -74,11 +68,7 @@ class _MyHomePageState extends State<HomeScreen> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => LectureScreen(),
-                ),
-              ),
+              onTap: startLearning,
               child: Container(
                 padding: const EdgeInsets.only(top: 15, left: 15),
                 height: 170,
@@ -99,59 +89,95 @@ class _MyHomePageState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
-            Text(
-              'Lectures',
-              style:
-                  GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Lectures',
+                  style: GoogleFonts.roboto(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                TextButton(
+                  onPressed: startLearning,
+                  style: ElevatedButton.styleFrom(
+                      alignment: Alignment.bottomCenter,
+                      padding: EdgeInsets.only(bottom: 0)),
+                  child: Text(
+                    'Start learning>>',
+                    style: GoogleFonts.roboto(
+                        color: Colors.orange, fontWeight: FontWeight.w500),
+                  ),
+                )
+              ],
             ),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 5 / 3.5,
-                children: [
-                  LectureTile(
-                    text: 'Greetings',
-                    color: Color(0XFFF4784E),
-                    secondColor: Color(0XFFEC4812),
-                    numberOfCourses: 1,
-                  ),
-                  LectureTile(
-                    text: 'Counting',
-                    color: Color(0XFF7593E9),
-                    secondColor: Color(0XFF3765EC),
-                    numberOfCourses: 1,
-                  ),
-                  LectureTile(
-                    text: 'Names',
-                    color: Color(0XFFF5E24B),
-                    secondColor: Color(0XFFF2D701),
-                    numberOfCourses: 1,
-                  ),
-                  LectureTile(
-                    text: 'Simple Sentences',
-                    color: Color(0XFF979AC6),
-                    secondColor: Color(0XFF777BB3),
-                    numberOfCourses: 1,
-                  ),
-                  LectureTile(
-                    text: 'Greetings',
-                    color: Color(0XFFA179DC),
-                    secondColor: Color(0XFFA179DC).withBlue(250),
-                    numberOfCourses: 1,
-                  ),
-                ],
-              ),
+            BlocBuilder<VideoBloc, VideoState>(
+              builder: (context, state) {
+                List<Video> _lectures = [];
+                final colors = [
+                  Color(0XFFF4784E),
+                  Color(0XFF7593E9),
+                  Color(0XFFF5E24B),
+                  Color(0XFF979AC6),
+                  Color(0XFFA179DC),
+                  Color(0XFFF4784E),
+                  Color(0XFFF5E24B),
+                ];
+                final secondColors = [
+                  Color(0XFFEC4812),
+                  Color(0XFF3765EC),
+                  Color(0XFFF2D701),
+                  Color(0XFF777BB3),
+                  Color(0XFFA179DC).withBlue(250),
+                  Color(0XFFEC4812),
+                  Color(0XFFF2D701),
+                ];
+                final categories = [
+                  'Greetings and Introductions',
+                  'Counting',
+                  'Alphabets',
+                  'Basic Vocabulary',
+                  'Basic Phrases',
+                  'Common Expressions',
+                  'Extras'
+                ];
+                if (state is VideosLoading) {
+                  return const Expanded(child: Center(child: CircularProgressIndicator(),),);
+                }
+                _lectures.addAll(state.videos);
+                return _lectures.length > 0
+                    ? Expanded(
+                        child: GridView.builder(
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) => LectureTile(
+                            text: categories[index],
+                            color: colors[index],
+                            secondColor: secondColors[index],
+                            numberOfCourses: _lectures
+                                .where((lecture) =>
+                                    lecture.category == categories[index])
+                                .length,
+                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 5 / 3.5,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                          ),
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                            'Could not load your courses. Check your network connection!'),
+                      );
+              },
             ),
           ],
         ),
       ),
-      // bottomNavigationBar: BottomNavBar(
-      //   currentIndex: _navIndex,
-      // ),
     );
   }
 }
