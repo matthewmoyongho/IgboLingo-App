@@ -135,16 +135,20 @@ class HomeScreen extends StatelessWidget {
                   Color(0XFFF2D701),
                 ];
                 final categories = [
-                  'Greetings and Introductions',
-                  'Counting',
                   'Alphabets',
+                  'Counting',
+                  'Greetings and Introductions',
                   'Basic Vocabulary',
                   'Basic Phrases',
                   'Common Expressions',
                   'Extras'
                 ];
                 if (state is VideosLoading) {
-                  return const Expanded(child: Center(child: CircularProgressIndicator(),),);
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 }
                 _lectures.addAll(state.videos);
                 return _lectures.length > 0

@@ -47,9 +47,9 @@ class _VideoInfoState extends State<VideoInfo> {
                 gradient: LinearGradient(
                   colors: [
                     kPrimaryColor.withOpacity(
-                      0.9,
+                      .9,
                     ),
-                    kSecondaryColor,
+                    kSecondaryColor
                   ],
                   begin: FractionalOffset(0.0, 0.4),
                   end: Alignment.topRight,
@@ -104,12 +104,16 @@ class _VideoInfoState extends State<VideoInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: const [
-                            Icon(
-                              Icons.arrow_back_ios,
-                              size: 20,
-                              color: kSecondaryColor,
-                            ),
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  size: 20,
+                                  color: kSecondaryColor,
+                                )),
                             Expanded(child: SizedBox()),
                             Icon(
                               Icons.info_outline,

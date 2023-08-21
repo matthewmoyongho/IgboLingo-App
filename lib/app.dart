@@ -6,14 +6,14 @@ import 'package:igbo_lang_tutor/data/repositories/authentication_repository.dart
 import 'package:igbo_lang_tutor/data/repositories/user_repository.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/video/video_bloc.dart';
+import 'package:igbo_lang_tutor/presentation/screens/sign_up.dart';
 import 'package:igbo_lang_tutor/presentation/screens/tab_widget.dart';
 
 import './domain/business_logic/blocs/authentication/authentication_bloc.dart';
-import './domain/business_logic/blocs/authentication/authentication_state.dart';
 import './domain/business_logic/blocs/login/login_cubit.dart';
 import './domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
-import './presentation/screens/sign_up.dart';
 import 'data/repositories/lecture_repository.dart';
+import 'domain/business_logic/blocs/authentication/authentication_state.dart';
 
 class App extends StatelessWidget {
   App({
@@ -25,11 +25,14 @@ class App extends StatelessWidget {
   final bool showHome;
   final AuthenticationRepository repository;
   final LectureRepository videoRepository;
-  final _uid = FirebaseAuth.instance.currentUser!.uid;
+  late String _uid;
   final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      _uid = FirebaseAuth.instance.currentUser!.uid;
+    }
     return RepositoryProvider.value(
       value: (context) => repository,
       child: MultiBlocProvider(

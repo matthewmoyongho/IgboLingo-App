@@ -110,32 +110,41 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(
                         height: 5,
                       ),
-                      state.user!.photoUrl == null
-                          ? Container(
-                              height: 100,
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage('assets/avatar.png'),
-                                      fit: BoxFit.cover),
-                                  shape: BoxShape.circle),
-                            )
-                          : Container(
-                              height: 70,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: FadeInImage(
-                                  placeholder:
-                                      const AssetImage('assets/app_icon3.png'),
-                                  image: NetworkImage(state.user!.photoUrl!),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                      // state.user!.photoUrl == null
+                      //     ? Container(
+                      //         height: 100,
+                      //         width: 100,
+                      //         decoration: const BoxDecoration(
+                      //             image: DecorationImage(
+                      //                 image: AssetImage('assets/avatar.png'),
+                      //                 fit: BoxFit.cover),
+                      //             shape: BoxShape.circle),
+                      //       )
+                      //     : Container(
+                      //         height: 70,
+                      //         width: 70,
+                      //         decoration: BoxDecoration(
+                      //             color: Colors.white70,
+                      //             borderRadius: BorderRadius.circular(100)),
+                      //         child: ClipRRect(
+                      //           borderRadius: BorderRadius.circular(100),
+                      //           child: FadeInImage(
+                      //             placeholder:
+                      //                 const AssetImage('assets/avatar.png'),
+                      //             image: NetworkImage(state.user!.photoUrl!),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //         ),
+                      //       ),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/avatar.png'),
+                                fit: BoxFit.cover),
+                            shape: BoxShape.circle),
+                      ),
                       const SizedBox(
                         width: 20,
                       ),
@@ -146,7 +155,7 @@ class _ProfileState extends State<Profile> {
                           Column(
                             children: [
                               Text(
-                                '0',
+                                '${state.user!.level}',
                                 style: GoogleFonts.poppins(
                                     color: kSecondaryColor,
                                     fontSize: 14,
@@ -173,14 +182,14 @@ class _ProfileState extends State<Profile> {
                           Column(
                             children: [
                               Text(
-                                '0',
+                                '% 0',
                                 style: GoogleFonts.poppins(
                                     color: kSecondaryColor,
                                     fontSize: 14,
                                     decoration: TextDecoration.underline),
                               ),
                               Text(
-                                'lectures completed',
+                                '% course completed',
                                 style: GoogleFonts.poppins(
                                     color: kSecondaryColor, fontSize: 14),
                               ),

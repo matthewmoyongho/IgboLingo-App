@@ -6,18 +6,25 @@ class User extends Equatable {
   final String? name;
   final String? email;
   final String? photoUrl;
-
+  final int? level;
   final String? phone;
 
   const User(
-      {required this.id, this.phone, this.name, this.email, this.photoUrl});
+      {required this.id,
+      this.level,
+      this.phone,
+      this.name,
+      this.email,
+      this.photoUrl});
   User copyWith(
       {String? id,
+      int? level,
       String? name,
       String? email,
       String? phone,
       String? photoUrl}) {
     return User(
+        level: level ?? this.level,
         phone: phone ?? this.phone,
         id: id ?? this.id,
         name: name ?? this.name,
@@ -34,6 +41,7 @@ class User extends Equatable {
 
   factory User.fromJson(DocumentSnapshot<Map<String, dynamic>> json) {
     return User(
+      level: json['level'],
       id: json['uid'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
@@ -49,6 +57,9 @@ class User extends Equatable {
 
     if (user.name != null) {
       result.addAll({'name': user.name});
+    }
+    if (user.level != null) {
+      result.addAll({'level': user.name});
     }
     if (user.phone != null) {
       result.addAll({'phone': user.phone});

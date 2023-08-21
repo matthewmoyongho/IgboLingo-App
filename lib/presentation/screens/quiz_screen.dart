@@ -84,7 +84,7 @@ class _QuizState extends State<QuizScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => QuestionsScreen(
-                                    category: '',
+                                    category: categories[index],
                                   ),
                                 ),
                               );

@@ -285,6 +285,7 @@ class _registerButton extends StatelessWidget {
                           await context.read<SignUpCubit>().signUp();
                       if (firebaseUser != null) {
                         user = User(
+                          level: 1,
                           id: firebaseUser.uid,
                           name: state.nameInput.value.trim().toString(),
                           email: firebaseUser.email,

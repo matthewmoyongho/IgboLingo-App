@@ -71,6 +71,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getQuestionList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

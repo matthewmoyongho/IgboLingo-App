@@ -28,10 +28,18 @@ class VideoTIle extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
+
+                    // image: DecorationImage(
+                    //     image:FadeInImage(placeholder: AssetImage('assets/avatar.png'),image: NetworkImage(videos[index].thumbnail),),
+                    //     fit: BoxFit.cover),
+                    ),
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: AssetImage('assets/avatar.png'),
-                      fit: BoxFit.cover),
+                  child: FadeInImage(
+                    placeholder: AssetImage('assets/image_4.png'),
+                    image: NetworkImage(videos[index].thumbnail),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(
@@ -43,15 +51,13 @@ class VideoTIle extends StatelessWidget {
                 children: [
                   Container(
                     width: 220,
-                    child: FittedBox(
-                      child: Text(
-                        videos[index].name,
-                        style: GoogleFonts.poppins(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                        //softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
+                    child: Text(
+                      videos[index].name,
+                      style: GoogleFonts.poppins(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                      //softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ),
                   SizedBox(
