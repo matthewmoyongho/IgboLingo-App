@@ -5,8 +5,9 @@ import 'package:igbo_lang_tutor/presentation/widgets/result.dart';
 import '../widgets/quiz.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({Key? key}) : super(key: key);
-
+  QuestionsScreen({Key? key, required this.category}) : super(key: key);
+  String category;
+  //List<Map<String, Object>> questions;
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
 }
@@ -29,6 +30,46 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     });
   }
 
+  final categories = [
+    'Greetings and Introductions',
+    'Counting',
+    'Alphabets',
+    'Basic Vocabulary',
+    'Basic Phrases',
+    'Common Expressions',
+    'Extras'
+  ];
+  late List<Map<String, Object>> list;
+
+  getQuestionList() {
+    switch (widget.category) {
+      case "Greetings and Introductions":
+        list = kGreetingsAndIntroduction;
+        break;
+      case "Counting":
+        list = kNumbersAndCounting;
+        break;
+      case "Alphabets":
+        list = kBasicVocabulary;
+        break;
+      case "Basic Vocabulary":
+        list = kBasicVocabulary;
+        break;
+      case "Basic Phrases":
+        list = kBasicPhrasesAndQuestions;
+        break;
+      case "Common Expressions":
+        list = kDaysMonthsSeasons;
+        break;
+      case "Extras":
+        list = kBasicPhrasesAndQuestions;
+        break;
+      default:
+        list = [];
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,14 +78,14 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: _questionIndex < kQuestions.length
+        child: _questionIndex < list.length
             ? Quiz(
-                questions: kQuestions,
+                questions: list,
                 questionIndex: _questionIndex,
                 onPressed: _optionPressed,
               )
-            : Result(_totalScore, () => _resetQuiz(),
-                _totalScore == kQuestions.length),
+            : Result(
+                _totalScore, () => _resetQuiz(), _totalScore == list.length),
       ),
     );
   }

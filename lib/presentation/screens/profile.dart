@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,7 +32,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
-    final user = FirebaseAuth.instance.currentUser;
+    // final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: Colors.blue[900],
@@ -83,8 +82,6 @@ class _ProfileState extends State<Profile> {
       // ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          //context.read<UserBloc>().add(LoadUser());
-
           return Column(
             children: [
               Container(
@@ -113,14 +110,15 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(
                         height: 5,
                       ),
-                      user?.photoURL == null
-                          ? CircleAvatar(
-                              radius: 60,
-                              backgroundColor: Colors.blueGrey,
-                              child: Text(
-                                (user!.email?.substring(0, 1))!,
-                                style: TextStyle(fontSize: 100),
-                              ),
+                      state.user!.photoUrl == null
+                          ? Container(
+                              height: 100,
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/avatar.png'),
+                                      fit: BoxFit.cover),
+                                  shape: BoxShape.circle),
                             )
                           : Container(
                               height: 70,
@@ -133,7 +131,7 @@ class _ProfileState extends State<Profile> {
                                 child: FadeInImage(
                                   placeholder:
                                       const AssetImage('assets/app_icon3.png'),
-                                  image: NetworkImage(user!.photoURL!),
+                                  image: NetworkImage(state.user!.photoUrl!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -219,7 +217,7 @@ class _ProfileState extends State<Profile> {
                               TextFormField(
                                 maxLength: 11,
                                 readOnly: readOnly,
-                                initialValue: user.phoneNumber,
+                                initialValue: state.user!.phone,
                                 style: const TextStyle(fontSize: 18),
                                 keyboardType: TextInputType.number,
                                 textInputAction: TextInputAction.next,
@@ -244,7 +242,7 @@ class _ProfileState extends State<Profile> {
                               ),
                               TextFormField(
                                 readOnly: true,
-                                initialValue: user.email ?? '',
+                                initialValue: state.user!.email ?? '',
                                 style: const TextStyle(fontSize: 18),
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
@@ -269,7 +267,7 @@ class _ProfileState extends State<Profile> {
                               ),
                               TextFormField(
                                 readOnly: true,
-                                initialValue: user.displayName,
+                                initialValue: state.user!.name,
                                 style: const TextStyle(fontSize: 18),
                                 textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
@@ -283,39 +281,16 @@ class _ProfileState extends State<Profile> {
                               const SizedBox(
                                 height: 10,
                               ),
-//Birth Info
-                              const Text(
-                                'GENDER:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.blueGrey),
-                              ),
-                              TextFormField(
-                                readOnly: true,
-                                initialValue: user.displayName,
-                                style: const TextStyle(fontSize: 18),
-                                textInputAction: TextInputAction.next,
-                                decoration: const InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.blueGrey,
-                                    width: 3,
-                                  )),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-//Target gp
                             ]),
                       ),
                     ),
                   ]),
                 ),
-              if (state is UserLoading) CircularProgressIndicator(),
+              if (state is UserLoading)
+                const Expanded(
+                    child: Center(child: CircularProgressIndicator())),
               if (state is UserLoadingFailed)
-                Center(
+                const Center(
                   child: Text(
                       'Could not load user details. Please refresh with a better network!'),
                 )

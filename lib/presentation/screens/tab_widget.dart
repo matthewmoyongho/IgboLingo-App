@@ -69,7 +69,7 @@ class _TabWidgetState extends State<TabWidget> {
   }
 
   List tabScreens = [
-    //HomeScreen(),
+    '//HomeScreen()',
     LectureScreen(),
     QuizScreen(),
     Profile(),
@@ -90,7 +90,7 @@ class _TabWidgetState extends State<TabWidget> {
               startLearning: _startLearning,
               logout: _logout,
             )
-          : tabScreens[_navIndex + 1],
+          : tabScreens[_navIndex],
       bottomNavigationBar: BottomNavBar(
         currentIndex: _navIndex,
         onTap: _ontap,
