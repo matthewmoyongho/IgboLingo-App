@@ -94,6 +94,7 @@ class LectureListTile extends StatelessWidget {
       children: [
         BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
+            var _level;
             if (state is UserLoading) {
               return const CircularProgressIndicator();
             }
@@ -104,13 +105,15 @@ class LectureListTile extends StatelessWidget {
                     'Cannot load details at the moment. Try cheking your nekwork signal'),
               ));
             }
+            if (state.user != null) {
+              _level = state.user!.level;
+            }
             return Material(
-              color:
-                  index > state.user!.level! - 1 ? Colors.grey.shade200 : null,
+              color: index > _level - 1 ? Colors.grey.shade200 : null,
               borderRadius: BorderRadius.circular(20),
-              elevation: index > state.user!.level! - 1 ? 0 : 4,
+              elevation: index > _level - 1 ? 0 : 4,
               child: ListTile(
-                onTap: index > state.user!.level! - 1
+                onTap: index > _level - 1
                     ? () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -121,7 +124,10 @@ class LectureListTile extends StatelessWidget {
                       }
                     : () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => VideoInfo(category: category),
+                            builder: (context) => VideoInfo(
+                              category: category,
+                              index: index,
+                            ),
                           ),
                         ),
                 contentPadding: const EdgeInsets.only(

@@ -12,7 +12,8 @@ class LoadUser extends UserEvent {
 }
 
 class UpdateUser extends UserEvent {
-  UpdateUser();
+  User user;
+  UpdateUser({required this.user});
 
   @override
   List<Object?> get props => [];

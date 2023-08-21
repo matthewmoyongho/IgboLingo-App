@@ -85,6 +85,7 @@ class _QuizState extends State<QuizScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => QuestionsScreen(
                                     category: categories[index],
+                                    fromLecture: false,
                                   ),
                                 ),
                               );

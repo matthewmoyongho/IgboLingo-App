@@ -31,7 +31,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void _UpdateUser(UpdateUser event, Emitter<UserState> emit) async {
     final User? user;
-    emit(UserLoading());
+    await _repository.updateUserDetails(event.user);
     user = await _repository.getUserDetails();
     if (user == null) {
       emit(UserLoadingFailed(user: state.user));

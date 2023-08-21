@@ -5,8 +5,12 @@ import 'package:igbo_lang_tutor/presentation/widgets/result.dart';
 import '../widgets/quiz.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  QuestionsScreen({Key? key, required this.category}) : super(key: key);
+  QuestionsScreen(
+      {Key? key, required this.fromLecture, required this.category, this.index})
+      : super(key: key);
   String category;
+  bool fromLecture;
+  int? index;
   //List<Map<String, Object>> questions;
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
@@ -91,7 +95,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 onPressed: _optionPressed,
               )
             : Result(
-                _totalScore, () => _resetQuiz(), _totalScore == list.length),
+                index: widget.index!,
+                result: _totalScore,
+                reset: () => _resetQuiz(),
+                passed: _totalScore == list.length,
+                fromLecture: widget.fromLecture,
+              ),
       ),
     );
   }

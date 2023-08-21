@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_bloc.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/user/user_event.dart';
 
 import '../../core/constants.dart';
+import '../../data/models/user.dart';
+import '../../domain/business_logic/blocs/user/user_state.dart';
 
 class Result extends StatelessWidget {
   void Function() reset;
   final int result;
   bool passed;
-  Result(this.result, this.reset, this.passed);
+  bool fromLecture;
+  int index;
+  Result(
+      {required this.index,
+      required this.fromLecture,
+      required this.result,
+      required this.reset,
+      required this.passed});
 
   @override
   Widget build(BuildContext context) {
@@ -52,22 +64,39 @@ class Result extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                onPressed: reset,
+                onPressed: passed ? null : reset,
                 style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimaryColor,
                     fixedSize:
                         Size(MediaQuery.of(context).size.width * .35, 45)),
                 child: const Text("Restart Quiz"),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      if (fromLecture && index < state.user!.level! - 1) {
+                        context.read<UserBloc>().add(
+                              UpdateUser(
+                                user: User(
+                                  id: state.user!.id,
+                                  level: state.user!.level! + 1,
+                                ),
+                              ),
+                            );
+                        context.read<UserBloc>().add(
+                              LoadUser(),
+                            );
+                      }
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryColor,
+                        fixedSize:
+                            Size(MediaQuery.of(context).size.width * .35, 45)),
+                    child: const Text("Finish"),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimaryColor,
-                    fixedSize:
-                        Size(MediaQuery.of(context).size.width * .35, 45)),
-                child: const Text("Finish"),
               ),
             ],
           )

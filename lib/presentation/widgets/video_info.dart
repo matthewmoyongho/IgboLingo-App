@@ -11,9 +11,11 @@ import '../../domain/business_logic/blocs/video/video_bloc.dart';
 import '../../domain/business_logic/blocs/video/video_state.dart';
 
 class VideoInfo extends StatefulWidget {
-  VideoInfo({Key? key, required this.category}) : super(key: key);
+  VideoInfo({Key? key, required this.category, required this.index})
+      : super(key: key);
 
   String category;
+  int index;
 
   @override
   State<VideoInfo> createState() => _VideoInfoState();
@@ -243,7 +245,11 @@ class _VideoInfoState extends State<VideoInfo> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => QuestionsScreen(category: widget.category),
+                    builder: (_) => QuestionsScreen(
+                      category: widget.category,
+                      fromLecture: true,
+                      index: widget.index,
+                    ),
                   ),
                 );
               },
