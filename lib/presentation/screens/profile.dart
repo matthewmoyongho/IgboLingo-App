@@ -139,11 +139,12 @@ class _ProfileState extends State<Profile> {
                       Container(
                         height: 100,
                         width: 100,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/avatar.png'),
-                                fit: BoxFit.cover),
-                            shape: BoxShape.circle),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/avatar.png'),
+                              fit: BoxFit.cover),
+                          shape: BoxShape.circle,
+                        ),
                       ),
                       const SizedBox(
                         width: 20,
@@ -171,30 +172,6 @@ class _ProfileState extends State<Profile> {
                           const SizedBox(
                             width: 15,
                           ),
-                          Container(
-                            width: 1,
-                            height: 40,
-                            color: kSecondaryColor,
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '% 0',
-                                style: GoogleFonts.poppins(
-                                    color: kSecondaryColor,
-                                    fontSize: 14,
-                                    decoration: TextDecoration.underline),
-                              ),
-                              Text(
-                                '% course completed',
-                                style: GoogleFonts.poppins(
-                                    color: kSecondaryColor, fontSize: 14),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ],
@@ -216,34 +193,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'PHONE NO:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.blueGrey),
-                              ),
-
-                              TextFormField(
-                                maxLength: 11,
-                                readOnly: readOnly,
-                                initialValue: state.user!.phone,
-                                style: const TextStyle(fontSize: 18),
-                                keyboardType: TextInputType.number,
-                                textInputAction: TextInputAction.next,
-                                decoration: const InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.blueGrey,
-                                    width: 3,
-                                  )),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-//Email Address
-                              const Text(
-                                'EMAIL ADDRESS:',
+                                'EMAIL ADDRESS',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -268,7 +218,7 @@ class _ProfileState extends State<Profile> {
                               ),
 //Birth Info
                               const Text(
-                                'USERNAME:',
+                                'USERNAME',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,

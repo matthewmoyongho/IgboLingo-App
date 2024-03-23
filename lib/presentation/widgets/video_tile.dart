@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../core/constants.dart';
 import '../../data/models/video.dart';
 
 class VideoTIle extends StatelessWidget {
@@ -63,12 +62,12 @@ class VideoTIle extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    '5 mins',
-                    style: GoogleFonts.poppins(
-                      color: kPrimaryColor,
-                    ),
-                  ),
+                  // Text(
+                  //   '5 mins',
+                  //   style: GoogleFonts.poppins(
+                  //     color: kPrimaryColor,
+                  //   ),
+                  // ),
                 ],
               )
             ],
@@ -76,47 +75,47 @@ class VideoTIle extends StatelessWidget {
           SizedBox(
             height: 18,
           ),
-          Row(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                width: 80,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Color(0XFFeaeefc),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  '15s rest',
-                  style: TextStyle(
-                    color: Color(0xFF839fed),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  for (int i = 0; i < 70; i++)
-                    i.isEven
-                        ? Container(
-                            width: 3,
-                            height: 1,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF839fed),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          )
-                        : Container(
-                            width: 3,
-                            height: 1,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          )
-                ],
-              )
-            ],
-          ),
+          // Row(
+          //   children: [
+          // Container(
+          //   alignment: Alignment.center,
+          //   width: 80,
+          //   height: 20,
+          //   decoration: BoxDecoration(
+          //     color: Color(0XFFeaeefc),
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   child: Text(
+          //     '15s rest',
+          //     style: TextStyle(
+          //       color: Color(0xFF839fed),
+          //     ),
+          //   ),
+          // ),
+          // Row(
+          //   children: [
+          //     for (int i = 0; i < 70; i++)
+          //       i.isEven
+          //           ? Container(
+          //               width: 3,
+          //               height: 1,
+          //               decoration: BoxDecoration(
+          //                 color: Color(0xFF839fed),
+          //                 borderRadius: BorderRadius.circular(2),
+          //               ),
+          //             )
+          //           : Container(
+          //               width: 3,
+          //               height: 1,
+          //               decoration: BoxDecoration(
+          //                 color: Colors.white,
+          //                 borderRadius: BorderRadius.circular(2),
+          //               ),
+          //             )
+          //   ],
+          // )
+          //   ],
+          // ),
         ],
       ),
     );

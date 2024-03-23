@@ -41,6 +41,9 @@ class SignUp extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      height: 40,
+                    ),
                     Text(
                       'Sign Up',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w500),

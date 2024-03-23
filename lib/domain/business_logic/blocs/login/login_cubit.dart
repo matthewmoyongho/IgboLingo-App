@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:formz/formz.dart';
 import 'package:igbo_lang_tutor/data/service/forms_inputs/password_input.dart';
 
@@ -59,5 +60,30 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
     }
+  }
+
+  Future<firebase_auth.User?> googleSignIn() async {
+    firebase_auth.User? userDetails;
+    emit(
+      state.copyWith(status: FormzSubmissionStatus.inProgress),
+    );
+
+    try {
+      userDetails = await repository.googleLogin();
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.success),
+      );
+    } on LogInWithGoogleError catch (e) {
+      emit(
+        state.copyWith(
+            errorMessage: e.errorMessage,
+            status: FormzSubmissionStatus.failure),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.failure),
+      );
+    }
+    return userDetails;
   }
 }

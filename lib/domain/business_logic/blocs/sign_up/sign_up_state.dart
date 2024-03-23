@@ -1,6 +1,5 @@
 import 'package:formz/formz.dart';
 import 'package:igbo_lang_tutor/data/service/forms_inputs/name_input.dart';
-import 'package:igbo_lang_tutor/data/service/forms_inputs/phone_input.dart';
 
 import '../../../../../data/service/forms_inputs/email_input.dart';
 import '../../../../../data/service/forms_inputs/password_input.dart';
@@ -8,7 +7,6 @@ import '../../../../../data/service/forms_inputs/password_input.dart';
 class SignUpState {
   final EmailInput emailInput;
   final NameInput nameInput;
-  final PhoneInput phoneInput;
   final PasswordInput passwordInput;
   final bool category;
   final bool showPassword;
@@ -18,7 +16,6 @@ class SignUpState {
 
   const SignUpState(
       {this.nameInput = const NameInput.pure(),
-      this.phoneInput = const PhoneInput.pure(),
       this.passwordInput = const PasswordInput.pure(),
       this.emailInput = const EmailInput.pure(),
       this.formStatus = false,
@@ -29,7 +26,6 @@ class SignUpState {
 
   SignUpState copyWith({
     NameInput? nameInput,
-    PhoneInput? phoneInput,
     EmailInput? emailInput,
     PasswordInput? passwordInput,
     bool? category,
@@ -40,7 +36,6 @@ class SignUpState {
   }) {
     return SignUpState(
       nameInput: nameInput ?? this.nameInput,
-      phoneInput: phoneInput ?? this.phoneInput,
       emailInput: emailInput ?? this.emailInput,
       passwordInput: passwordInput ?? this.passwordInput,
       category: category ?? this.category,

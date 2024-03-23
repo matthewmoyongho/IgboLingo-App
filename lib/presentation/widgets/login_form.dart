@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,11 @@ import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubi
 import 'package:igbo_lang_tutor/presentation/screens/sign_up.dart';
 
 import '../../core/constants.dart';
+import '../../data/models/user.dart';
 import '../../domain/business_logic/blocs/sign_up/sign_up_state.dart';
+import '../../domain/business_logic/blocs/user/user_bloc.dart';
+import '../../domain/business_logic/blocs/user/user_event.dart';
+import '../screens/tab_widget.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -195,13 +200,16 @@ class _loginButton extends StatelessWidget {
                   ? null
                   : () async {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      await context.read<LoginCubit>().login();
+                      await context.read<LoginCubit>().login().then((value) {
+                        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        //     builder: (_) => TabWidget(title: 'title')));
+                      });
                     },
               style: ElevatedButton.styleFrom(
                   primary: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+                  fixedSize: Size(deviceSize.width, 48)),
               child: Text(
                 'Login',
                 style: GoogleFonts.poppins(fontSize: 14),
@@ -280,12 +288,32 @@ class _googleSignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          FocusScope.of(context).unfocus();
+
+          await context.read<LoginCubit>().googleSignIn().then((user) async {
+            if (user != null) {
+              final localUser = User(
+                id: user.uid,
+                level: 1,
+                email: user.email,
+                name: user.displayName,
+              );
+              context.read<UserBloc>().add(AddUser(localUser,
+                  firebaseAuth.FirebaseAuth.instance.currentUser!.uid));
+            }
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => TabWidget(title: 'title'),
+              ),
+            );
+          });
+        },
         style: ElevatedButton.styleFrom(
             backgroundColor: Color(0XFFFFFFFF),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+            fixedSize: Size(deviceSize.width, 48)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

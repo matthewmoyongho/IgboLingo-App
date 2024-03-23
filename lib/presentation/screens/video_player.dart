@@ -9,23 +9,11 @@ import '../../data/models/video.dart';
 import '../../domain/business_logic/blocs/video/video_bloc.dart';
 import '../../domain/business_logic/blocs/video/video_state.dart';
 
-// class VideoItem {
-//   final String title;
-//   final String description;
-//   final String videoUrl;
-//
-//   VideoItem(
-//       {required this.title, required this.description, required this.videoUrl});
-// }
-
 class VideoScreen extends StatelessWidget {
-  final asset = 'assets/video.mp4';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black45,
-      //kSecondaryColor,
       appBar: AppBar(
         title: Text('Enjoy your lectures'),
         backgroundColor: Colors.black45,
@@ -126,16 +114,3 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     );
   }
 }
-
-// In your main app:
-// void main() {
-//   runApp(MaterialApp(
-//     home: VideoScreen(
-//       video: Video(
-//         name: 'Sample Video',
-//         description: 'A demo video for illustration.',
-//         mediaUrl: 'YOUR_VIDEO_URL_FROM_FIRESTORE',
-//       ),
-//     ),
-//   ));
-// }

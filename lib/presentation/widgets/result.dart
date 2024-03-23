@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -82,11 +83,13 @@ class Result extends StatelessWidget {
                                   id: state.user!.id,
                                   level: state.user!.level! + 1,
                                 ),
+                                uid: firebaseAuth
+                                    .FirebaseAuth.instance.currentUser!.uid,
                               ),
                             );
-                        context.read<UserBloc>().add(
-                              LoadUser(),
-                            );
+                        context.read<UserBloc>().add(LoadUser(
+                            uid: firebaseAuth
+                                .FirebaseAuth.instance.currentUser!.uid));
                       }
                       Navigator.of(context).pop();
                     },

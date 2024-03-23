@@ -17,9 +17,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   void _loadUser(LoadUser event, Emitter<UserState> emit) async {
-    final User? user;
     emit(UserLoading());
-    user = await _repository.getUserDetails();
+    User? user = await _repository.getUserDetails(uid: event.uid);
+    // print(user!.name);
+    //TODO: Add try catch check
+    // emit(UserLoaded(user: user));
     if (user == null) {
       emit(UserLoadingFailed(user: state.user));
     } else {
@@ -31,8 +33,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void _UpdateUser(UpdateUser event, Emitter<UserState> emit) async {
     final User? user;
-    await _repository.updateUserDetails(event.user);
-    user = await _repository.getUserDetails();
+    await _repository.updateUserDetails(event.user, uid: event.uid);
+    user = await _repository.getUserDetails(uid: event.uid);
     if (user == null) {
       emit(UserLoadingFailed(user: state.user));
     } else {
@@ -44,6 +46,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void _addUser(AddUser event, Emitter<UserState> emit) async {
     emit(UserLoading());
-    await _repository.addUserUserDetails(event.user);
+    await _repository.addUserUserDetails(event.user, event.uid);
+    final user = await _repository.getUserDetails(uid: event.uid);
+    emit(UserLoaded(user: user));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../core/cache.dart';
 import '../models/user.dart' as appUser;
@@ -37,6 +38,50 @@ class SignUpWithEmailAndPasswordError implements Exception {
   }
 }
 
+class LogInWithGoogleError implements Exception {
+  final String errorMessage;
+  const LogInWithGoogleError(
+      [this.errorMessage = 'An unknown exception occurred']);
+  factory LogInWithGoogleError.fromCode(String code) {
+    switch (code) {
+      case 'account-exists-with-different-credential':
+        return const LogInWithGoogleError(
+          'Account exists with different credentials.',
+        );
+      case 'invalid-credential':
+        return const LogInWithGoogleError(
+          'The credential received is malformed or has expired.',
+        );
+      case 'operation-not-allowed':
+        return const LogInWithGoogleError(
+          'Operation is not allowed.  Please contact support.',
+        );
+      case 'user-disabled':
+        return const LogInWithGoogleError(
+          'This user has been disabled. Please contact support for help.',
+        );
+      case 'user-not-found':
+        return const LogInWithGoogleError(
+          'Email is not found, please create an account.',
+        );
+      case 'wrong-password':
+        return const LogInWithGoogleError(
+          'Incorrect password, please try again.',
+        );
+      case 'invalid-verification-code':
+        return const LogInWithGoogleError(
+          'The credential verification code received is invalid.',
+        );
+      case 'invalid-verification-id':
+        return const LogInWithGoogleError(
+          'The credential verification ID received is invalid.',
+        );
+      default:
+        return const LogInWithGoogleError();
+    }
+  }
+}
+
 class LoginWithEmailAndPasswordError implements Exception {
   final String message;
   const LoginWithEmailAndPasswordError(
@@ -68,15 +113,18 @@ class LoginWithEmailAndPasswordError implements Exception {
 class AuthenticationRepository {
   FirebaseAuth _firebaseAuth;
   CacheClient _cacheClient;
+  final GoogleSignIn _googleSignIn;
   final FirebaseFirestore _firestore;
 
   AuthenticationRepository(
       {String? uid,
       FirebaseAuth? firebaseAuth,
+      GoogleSignIn? googleSignIn,
       FirebaseFirestore? firestore,
       CacheClient? cacheClient})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn(),
         _cacheClient = cacheClient ?? CacheClient();
 
   bool isWeb = kIsWeb;
@@ -97,7 +145,8 @@ class AuthenticationRepository {
         appUser.User.empty;
   }
 
-  Future<User?> signUp(String email, String password) async {
+  Future<User?> signUp(
+      {required String email, required String password}) async {
     User? user;
     try {
       final result = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -120,6 +169,32 @@ class AuthenticationRepository {
     } catch (_) {
       throw const LoginWithEmailAndPasswordError();
     }
+  }
+
+  Future<User?> googleLogin() async {
+    User? userDetail;
+    try {
+      late final AuthCredential authCredential;
+      if (kIsWeb) {
+        final googleProvider = GoogleAuthProvider();
+        final userCredentials =
+            await _firebaseAuth.signInWithPopup(googleProvider);
+        authCredential = userCredentials.credential!;
+      } else {
+        final googleUser = await _googleSignIn.signIn();
+        final googleAuth = await googleUser!.authentication;
+        authCredential = GoogleAuthProvider.credential(
+            idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+      }
+      await _firebaseAuth.signOut();
+      final user = await _firebaseAuth.signInWithCredential(authCredential);
+      userDetail = user.user!;
+    } on FirebaseAuthException catch (e) {
+      throw LogInWithGoogleError.fromCode(e.code);
+    } catch (_) {
+      throw LogInWithGoogleError();
+    }
+    return userDetail;
   }
 
   Future<void> logout() async {
@@ -146,7 +221,6 @@ class AuthenticationRepository {
 
 extension on User {
   appUser.User get toUser {
-    return appUser.User(
-        id: uid, name: displayName, email: email, photoUrl: photoURL);
+    return appUser.User(id: uid, name: displayName, email: email);
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:igbo_lang_tutor/presentation/widgets/video_info.dart';
 
 import '../../core/constants.dart';
 import '../../data/models/video.dart';
@@ -9,6 +8,7 @@ import '../../domain/business_logic/blocs/user/user_bloc.dart';
 import '../../domain/business_logic/blocs/user/user_state.dart';
 import '../../domain/business_logic/blocs/video/video_bloc.dart';
 import '../../domain/business_logic/blocs/video/video_state.dart';
+import '../widgets/video_info.dart';
 
 class LectureScreen extends StatelessWidget {
   const LectureScreen({super.key});
@@ -48,22 +48,28 @@ class LectureScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ));
                   }
-                  videos.addAll(state.videos);
-                  return ListView(
-                    children: [
-                      ...List.generate(
-                          categories.length,
-                          (index) => LectureListTile(
-                                index: index,
-                                category: categories[index],
-                                numberOfCourses: videos
-                                    .where((video) =>
-                                        video.category == categories[index])
-                                    .length,
-                                rating: 4.5,
-                              )),
-                    ],
-                  );
+                  if (state is VideosLoaded) {
+                    videos.addAll(state.videos);
+                    return ListView(
+                      children: List.generate(
+                        categories.length,
+                        (index) => LectureListTile(
+                          index: index,
+                          category: categories[index],
+                          numberOfCourses: videos
+                              .where((video) =>
+                                  video.category == categories[index])
+                              .length,
+                          // rating: 4.5,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Expanded(
+                      child: Center(
+                    child: Text('Error Fetching data'),
+                  ));
                 },
               ),
             )
@@ -77,7 +83,7 @@ class LectureScreen extends StatelessWidget {
 class LectureListTile extends StatelessWidget {
   String category;
   int numberOfCourses;
-  double rating;
+  // double rating;
   int index;
 
   LectureListTile({
@@ -85,7 +91,7 @@ class LectureListTile extends StatelessWidget {
     required this.index,
     required this.category,
     required this.numberOfCourses,
-    required this.rating,
+    // required this.rating,
   });
 
   @override
@@ -94,31 +100,18 @@ class LectureListTile extends StatelessWidget {
       children: [
         BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
-            var _level;
-            if (state is UserLoading) {
-              return const CircularProgressIndicator();
-            }
-            if (state is UserLoadingFailed) {
-              return const Expanded(
-                  child: Center(
-                child: Text(
-                    'Cannot load details at the moment. Try cheking your nekwork signal'),
-              ));
-            }
-            if (state.user != null) {
-              _level = state.user!.level;
-            }
             return Material(
-              color: index > _level - 1 ? Colors.grey.shade200 : null,
+              color:
+                  index > state.user!.level! - 1 ? Colors.grey.shade200 : null,
               borderRadius: BorderRadius.circular(20),
-              elevation: index > _level - 1 ? 0 : 4,
+              elevation: index > state.user!.level! - 1 ? 0 : 4,
               child: ListTile(
-                onTap: index > _level - 1
+                onTap: index > state.user!.level! - 1
                     ? () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                                'Lecture is locked. You have to finish the previous lecture'),
+                                'Lecture is locked. You have to complete the quiz for the previous lecture first'),
                           ),
                         );
                       }
@@ -168,7 +161,7 @@ class LectureListTile extends StatelessWidget {
                             const SizedBox(
                               width: 5,
                             ),
-                            Text('$rating'),
+                            // Text('$rating'),
                           ],
                         )
                       ],

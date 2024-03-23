@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:igbo_lang_tutor/data/models/user.dart';
+import 'package:igbo_lang_tutor/domain/business_logic/blocs/login/login_cubit.dart';
 import 'package:igbo_lang_tutor/domain/business_logic/blocs/sign_up/sign_up_cubit.dart';
 import 'package:igbo_lang_tutor/presentation/screens/login.dart';
 
@@ -27,10 +29,6 @@ class SignUpForm extends StatelessWidget {
           height: 10,
         ),
         _nameField(),
-        const SizedBox(
-          height: 10,
-        ),
-        _phoneField(),
         const SizedBox(
           height: 10,
         ),
@@ -167,49 +165,49 @@ class _nameField extends StatelessWidget {
   }
 }
 
-class _phoneField extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(
-      buildWhen: (previous, current) => current != previous,
-      builder: (context, state) {
-        return Column(
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.email_sharp,
-                  color: Color(0XFF000000),
-                ),
-                const SizedBox(
-                  width: 7,
-                ),
-                Text(
-                  'Phone',
-                  style: GoogleFonts.poppins(
-                      fontSize: 14, color: const Color(0XFF000000)),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            TextField(
-              key: const Key('Phone_input_field'),
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.next,
-              onChanged: (val) => context.read<SignUpCubit>().phoneChanged(val),
-              decoration: const InputDecoration(
-                  //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
-                  border: OutlineInputBorder(),
-                  isDense: true),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
+// class _phoneField extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<SignUpCubit, SignUpState>(
+//       buildWhen: (previous, current) => current != previous,
+//       builder: (context, state) {
+//         return Column(
+//           children: [
+//             Row(
+//               children: [
+//                 const Icon(
+//                   Icons.email_sharp,
+//                   color: Color(0XFF000000),
+//                 ),
+//                 const SizedBox(
+//                   width: 7,
+//                 ),
+//             //     Text(
+//             //       'Phone',
+//             //       style: GoogleFonts.poppins(
+//             //           fontSize: 14, color: const Color(0XFF000000)),
+//             //     ),
+//             //   ],
+//             // ),
+//             // const SizedBox(
+//             //   height: 7,
+//             // ),
+//             // TextField(
+//             //   key: const Key('Phone_input_field'),
+//             //   keyboardType: TextInputType.phone,
+//             //   textInputAction: TextInputAction.next,
+//             //   onChanged: (val) => context.read<SignUpCubit>().phoneChanged(val),
+//             //   decoration: const InputDecoration(
+//             //       //errorText: state.emailInput.isNotValid ? 'invalid email' : null,
+//             //       border: OutlineInputBorder(),
+//             //       isDense: true),
+//             // ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }
 
 class _passwordField extends StatelessWidget {
   @override
@@ -280,35 +278,33 @@ class _registerButton extends StatelessWidget {
               onPressed: state.formStatus == true
                   ? () async {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      final User user;
-                      final firebaseUser =
-                          await context.read<SignUpCubit>().signUp();
-                      if (firebaseUser != null) {
-                        user = User(
-                          level: 1,
-                          id: firebaseUser.uid,
-                          name: state.nameInput.value.trim().toString(),
-                          email: firebaseUser.email,
-                          photoUrl: firebaseUser.photoURL,
-                          phone: state.phoneInput.value.trim().toString(),
-                        );
-                        print(firebaseUser.uid);
-                        print(firebaseUser.photoURL);
-                        print(firebaseUser.photoURL);
-                        print(firebaseUser.displayName);
-                        print(firebaseUser.email);
-
-                        context.read<UserBloc>().add(
-                              AddUser(user),
-                            );
-                      }
+                      await context.read<SignUpCubit>().signUp().then((user) {
+                        if (user != null) {
+                          final localUser = User(
+                            level: 1,
+                            id: user.uid,
+                            name: state.nameInput.value.trim().toString(),
+                            email: user.email,
+                          );
+                          context.read<UserBloc>().add(
+                                AddUser(
+                                    localUser,
+                                    firebaseAuth.FirebaseAuth.instance
+                                        .currentUser!.uid),
+                              );
+                          // Navigator.of(context).pushReplacement(
+                          //     MaterialPageRoute(
+                          //         builder: (_) => TabWidget(title: 'title')));
+                        }
+                      });
                     }
                   : null,
               style: ElevatedButton.styleFrom(
-                  primary: kPrimaryColor,
+                  backgroundColor: kPrimaryColor,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+                  fixedSize: Size(deviceSize.width, 48)),
               child: Text(
                 'Register',
                 style: GoogleFonts.poppins(fontSize: 14),
@@ -371,12 +367,32 @@ class _googleSignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          FocusScope.of(context).unfocus();
+
+          await context.read<LoginCubit>().googleSignIn().then((user) async {
+            if (user != null) {
+              final localUser = User(
+                id: user.uid,
+                level: 1,
+                email: user.email,
+                name: user.displayName,
+              );
+              context.read<UserBloc>().add(AddUser(localUser,
+                  firebaseAuth.FirebaseAuth.instance.currentUser!.uid));
+            }
+            // Navigator.of(context).pushReplacement(
+            //   MaterialPageRoute(
+            //     builder: (_) => TabWidget(title: 'title'),
+            //   ),
+            // );
+          });
+        },
         style: ElevatedButton.styleFrom(
             backgroundColor: Color(0XFFFFFFFF),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            fixedSize: Size(deviceSize.width, deviceSize.height * 0.035)),
+            fixedSize: Size(deviceSize.width, 48)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

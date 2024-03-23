@@ -2,7 +2,7 @@
     package="com.moyongho.igbo_lang_tutor">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="igbo_lang_tutor"
+        android:label="IgboLingo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

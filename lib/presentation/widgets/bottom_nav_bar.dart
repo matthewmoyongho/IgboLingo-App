@@ -30,7 +30,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         BottomNavigationBarItem(
           backgroundColor: Color(0XFF1B2A47),
           icon: Icon(
-            Icons.account_circle,
+            Icons.menu_book,
           ),
           label: 'Lecture',
         ),
@@ -44,7 +44,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         BottomNavigationBarItem(
           backgroundColor: kSecondaryColor,
           icon: Icon(
-            Icons.settings,
+            Icons.account_circle,
           ),
           label: 'Profile',
         ),

@@ -5,6 +5,7 @@ import 'package:igbo_lang_tutor/core/constants.dart';
 import 'package:igbo_lang_tutor/data/models/video.dart';
 import 'package:igbo_lang_tutor/presentation/screens/questions_screen.dart';
 import 'package:igbo_lang_tutor/presentation/widgets/video_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../domain/business_logic/blocs/video/video_bloc.dart';
@@ -28,6 +29,7 @@ class _VideoInfoState extends State<VideoInfo> {
   bool _disposed = false;
   int _isPlayingIndex = -1;
   List<Video>? _videosList;
+  final site = Uri.parse('https://www.youtube.com/@IGBOTICGIRL');
 
   @override
   void dispose() {
@@ -145,51 +147,9 @@ class _VideoInfoState extends State<VideoInfo> {
                                   color: kPrimaryColor.withOpacity(0.4)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.timer,
-                                    size: 20,
-                                    color: kSecondaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '68 min',
-                                    style: TextStyle(
-                                        fontSize: 16, color: kSecondaryColor),
-                                  )
-                                ],
+                                children: [],
                               ),
                             ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 200,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: kPrimaryColor.withOpacity(0.4)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.timer,
-                                    size: 20,
-                                    color: kSecondaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Resistent band, kettebel',
-                                    style: TextStyle(
-                                        fontSize: 16, color: kSecondaryColor),
-                                  )
-                                ],
-                              ),
-                            )
                           ],
                         ),
                         SizedBox(
@@ -209,30 +169,34 @@ class _VideoInfoState extends State<VideoInfo> {
                       const EdgeInsets.only(top: 30, left: 30, right: 30.0),
                   child: Column(
                     children: [
+                      TextButton(
+                        onPressed: () => setState(() {
+                          launchUrl(site, mode: LaunchMode.externalApplication);
+                        }),
+                        child: FittedBox(
+                          child: Text(
+                            'View youtube channel for video source >>',
+                            style: GoogleFonts.poppins(
+                              color: Colors.blue[600],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ),
                       Row(
                         children: [
                           Text(
-                            'Circuit 1: Legs annd Toning',
+                            _videosList != null
+                                ? '${_videosList!.length} Videos'
+                                : '',
                             style: GoogleFonts.poppins(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                          Expanded(child: SizedBox()),
-                          Icon(
-                            Icons.loop,
-                            size: 30,
-                            color: kPrimaryColor,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '3 sets',
-                            style:
-                                TextStyle(fontSize: 15, color: kPrimaryColor),
-                          )
                         ],
                       ),
                       _videoList(),
@@ -243,6 +207,7 @@ class _VideoInfoState extends State<VideoInfo> {
             ),
             ElevatedButton(
               onPressed: () {
+                _controller!.pause();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => QuestionsScreen(
@@ -345,7 +310,7 @@ class _VideoInfoState extends State<VideoInfo> {
         aspectRatio: 16 / 9,
         child: Center(
           child: Text(
-            'Loading video...',
+            'click play to watch video',
             style: TextStyle(fontSize: 20, color: kSecondaryColor),
           ),
         ),

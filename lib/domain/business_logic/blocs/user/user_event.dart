@@ -5,24 +5,27 @@ import '../../../../data/models/user.dart';
 abstract class UserEvent extends Equatable {}
 
 class LoadUser extends UserEvent {
-  LoadUser();
+  LoadUser({required this.uid});
+  final String uid;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [uid];
 }
 
 class UpdateUser extends UserEvent {
-  User user;
-  UpdateUser({required this.user});
+  final String uid;
+  final User user;
+  UpdateUser({required this.user, required this.uid});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [user, uid];
 }
 
 class AddUser extends UserEvent {
   final User user;
-  AddUser(this.user);
+  final String uid;
+  AddUser(this.user, this.uid);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [user];
 }

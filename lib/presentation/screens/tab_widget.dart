@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igbo_lang_tutor/core/constants.dart';
@@ -11,8 +12,8 @@ import 'package:igbo_lang_tutor/presentation/screens/profile.dart';
 import 'package:igbo_lang_tutor/presentation/screens/quiz_screen.dart';
 import 'package:igbo_lang_tutor/presentation/widgets/bottom_nav_bar.dart';
 
-import './lecture_screen.dart';
 import '../../domain/business_logic/blocs/user/user_event.dart';
+import './lecture_screen.dart';
 
 class TabWidget extends StatefulWidget {
   const TabWidget({super.key, required this.title});
@@ -57,11 +58,6 @@ class _TabWidgetState extends State<TabWidget> {
     });
   }
 
-  void _fetchDetails() {
-    context.read<VideoBloc>().add(LoadVideos());
-    context.read<UserBloc>().add(LoadUser());
-  }
-
   void _startLearning() {
     setState(() {
       _navIndex = 1;
@@ -78,7 +74,10 @@ class _TabWidgetState extends State<TabWidget> {
   @override
   void initState() {
     super.initState();
-    _fetchDetails();
+    context.read<VideoBloc>().add(LoadVideos());
+    context
+        .read<UserBloc>()
+        .add(LoadUser(uid: FirebaseAuth.instance.currentUser!.uid));
   }
 
   @override

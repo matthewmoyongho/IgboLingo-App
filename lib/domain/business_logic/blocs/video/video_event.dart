@@ -4,21 +4,15 @@ abstract class VideosEvent extends Equatable {}
 
 class LoadVideos extends VideosEvent {
   LoadVideos();
+
   @override
   List<Object?> get props => [];
 }
 
-// class UpdateAssignments extends AssignmentEvent {
-//   final List<Assignment> assignments;
-//   UpdateAssignments({required this.assignments});
-//
-//   @override
-//   List<Object?> get props => [assignments];
-// }
-
 class GetVideos extends VideosEvent {
+  final String uid;
   final String id;
-  GetVideos(this.id);
+  GetVideos({required this.id, required this.uid});
   @override
   List<Object?> get props => [id];
 }

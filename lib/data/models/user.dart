@@ -1,35 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   final String? id;
   final String? name;
   final String? email;
-  final String? photoUrl;
   final int? level;
-  final String? phone;
 
-  const User(
-      {required this.id,
-      this.level,
-      this.phone,
-      this.name,
-      this.email,
-      this.photoUrl});
-  User copyWith(
-      {String? id,
-      int? level,
-      String? name,
-      String? email,
-      String? phone,
-      String? photoUrl}) {
+  const User({
+    required this.id,
+    this.level,
+    this.name,
+    this.email,
+  });
+  User copyWith({String? id, int? level, String? name, String? email}) {
     return User(
-        level: level ?? this.level,
-        phone: phone ?? this.phone,
-        id: id ?? this.id,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        photoUrl: photoUrl ?? this.photoUrl);
+      level: level ?? this.level,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+    );
   }
 
   static const empty = User(id: '');
@@ -37,16 +26,14 @@ class User extends Equatable {
   bool get isNotEmpty => this != empty;
 
   @override
-  List<Object?> get props => [id, name, email, photoUrl, phone];
+  List<Object?> get props => [id, name, email];
 
-  factory User.fromJson(DocumentSnapshot<Map<String, dynamic>> json) {
+  factory User.fromJson(Map<String, dynamic> json) {
     return User(
       level: json['level'],
       id: json['uid'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
-      photoUrl: json['photoUrl'] ?? '',
-      phone: json['phone'] ?? '',
     );
   }
 
@@ -61,14 +48,9 @@ class User extends Equatable {
     if (user.level != null) {
       result.addAll({'level': user.level});
     }
-    if (user.phone != null) {
-      result.addAll({'phone': user.phone});
-    }
+
     if (user.email != null) {
       result.addAll({'email': user.email});
-    }
-    if (user.photoUrl != null) {
-      result.addAll({'photoUrl': user.photoUrl});
     }
 
     return result;

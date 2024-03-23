@@ -25,14 +25,10 @@ class App extends StatelessWidget {
   final bool showHome;
   final AuthenticationRepository repository;
   final LectureRepository videoRepository;
-  late String _uid;
   final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      _uid = FirebaseAuth.instance.currentUser!.uid;
-    }
     return RepositoryProvider.value(
       value: (context) => repository,
       child: MultiBlocProvider(
@@ -51,8 +47,9 @@ class App extends StatelessWidget {
                   VideoBloc(videoRepository: videoRepository)),
           BlocProvider<UserBloc>(
             create: (BuildContext context) => UserBloc(
-                uid: _uid,
-                repository: UserRepository(firestore: _firestore, uid: _uid)),
+                uid: repository.currentUser.id,
+                repository: UserRepository(
+                    firestore: _firestore, uid: repository.currentUser.id)),
           )
         ],
         child: MaterialApp(
@@ -64,13 +61,6 @@ class App extends StatelessWidget {
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     buildWhen: (previous, current) => current != previous,
                     builder: (ctx, state) {
-                      // return state.authStatus ==
-                      //         AuthenticationStatus.authenticated
-                      //     ? const HomeScreen(
-                      //         title: 'Home',
-                      //       )
-                      //     : const SignUp();
-
                       return StreamBuilder<User?>(
                         stream: FirebaseAuth.instance.authStateChanges(),
                         builder: (cxt, snapshot) => snapshot.hasData

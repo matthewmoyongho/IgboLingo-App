@@ -12,24 +12,22 @@ class UserRepository {
       : _firestore = firestore ?? FirebaseFirestore.instance,
         _uid = uid ?? FirebaseAuth.instance.currentUser!.uid;
 
-  Future<localUser.User?> getUserDetails() async {
+  Future<localUser.User?> getUserDetails({String? uid}) async {
     localUser.User? user;
-    print(_uid);
-    print('I stated getting User details');
     try {
       DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await _firestore.collection('User').doc(_uid).get();
-
-      user = localUser.User.fromJson(snapshot);
-      print('I got the details');
+          await _firestore.collection('User').doc(uid).get();
+      if (snapshot.exists) {
+        user = localUser.User.fromJson(snapshot.data()!);
+      }
     } catch (e) {
       print(e);
     }
     return user;
   }
 
-  Future<void> updateUserDetails(localUser.User user) async {
-    final usersRef = _firestore.collection('User').doc(_uid);
+  Future<void> updateUserDetails(localUser.User user, {String? uid}) async {
+    final usersRef = _firestore.collection('User').doc(uid ?? _uid);
 
     try {
       usersRef.update(
@@ -40,9 +38,9 @@ class UserRepository {
     }
   }
 
-  Future<void> addUserUserDetails(localUser.User user) async {
+  Future<void> addUserUserDetails(localUser.User user, String? uid) async {
     final usersRef = _firestore.collection('User');
-
+    if (await getUserDetails(uid: uid!) != null) return;
     try {
       usersRef.doc(user.id).set(
             localUser.User.toMap(user),
